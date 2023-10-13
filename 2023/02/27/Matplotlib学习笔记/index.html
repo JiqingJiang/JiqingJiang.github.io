@@ -1,0 +1,950 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Matplotlib Pyplot学习笔记 | erode</title><meta name="author" content="Jiqing"><meta name="copyright" content="Jiqing"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Matplotlib PyplotPyplot 是 Matplotlib 的子库，提供了和 MATLAB 类似的绘图 API。 Pyplot 是常用的绘图模块，能很方便让用户绘制 2D 图表。 Pyplot 包含一系列绘图函数的相关函数，每个函数会对当前的图像进行一些修改，例如：给图像加上标记，生新的图像，在图像中产生新的绘图区域等等。 使用的时候，我们可以使用 import 导入 pyplot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matplotlib Pyplot学习笔记">
+<meta property="og:url" content="http://jiqingjiang.github.io/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="erode">
+<meta property="og:description" content="Matplotlib PyplotPyplot 是 Matplotlib 的子库，提供了和 MATLAB 类似的绘图 API。 Pyplot 是常用的绘图模块，能很方便让用户绘制 2D 图表。 Pyplot 包含一系列绘图函数的相关函数，每个函数会对当前的图像进行一些修改，例如：给图像加上标记，生新的图像，在图像中产生新的绘图区域等等。 使用的时候，我们可以使用 import 导入 pyplot">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://jiqingjiang.github.io/img/me.jpg">
+<meta property="article:published_time" content="2023-02-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-13T10:37:48.276Z">
+<meta property="article:author" content="Jiqing">
+<meta property="article:tag" content="Matplotlib">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://jiqingjiang.github.io/img/me.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://jiqingjiang.github.io/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Matplotlib Pyplot学习笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-13 18:37:48'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/me.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa fa-camera-retro"></i><span> Gallery</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/background.jpeg')"><nav id="nav"><span id="blog-info"><a href="/" title="erode"><span class="site-name">erode</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/gallery/"><i class="fa-fw fa fa-camera-retro"></i><span> Gallery</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Matplotlib Pyplot学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-26T16:00:00.000Z" title="发表于 2023-02-27 00:00:00">2023-02-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-13T10:37:48.276Z" title="更新于 2023-10-13 18:37:48">2023-10-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">python学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Matplotlib Pyplot学习笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="Matplotlib-Pyplot"><a href="#Matplotlib-Pyplot" class="headerlink" title="Matplotlib Pyplot"></a><a target="_blank" rel="noopener" href="https://www.runoob.com/matplotlib/matplotlib-pyplot.html">Matplotlib Pyplot</a></h2><p>Pyplot 是 Matplotlib 的子库，提供了和 MATLAB 类似的绘图 API。</p>
+<p>Pyplot 是常用的绘图模块，能很方便让用户绘制 2D 图表。</p>
+<p>Pyplot 包含一系列绘图函数的相关函数，每个函数会对当前的图像进行一些修改，例如：给图像加上标记，生新的图像，在图像中产生新的绘图区域等等。</p>
+<p>使用的时候，我们可以使用 import 导入 pyplot 库，并设置一个别名 <strong>plt</strong>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+
+<p><strong>plot()</strong> 用于画图它可以绘制点和线，语法格式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 画单条线</span></span><br><span class="line">plot([x], y, [fmt], *, data=<span class="literal">None</span>, **kwargs)</span><br><span class="line"><span class="comment"># 画多条线</span></span><br><span class="line">plot([x], y, [fmt], [x2], y2, [fmt2], ..., **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<ul>
+<li><strong>x, y：</strong>点或线的节点，x 为 x 轴数据，y 为 y 轴数据，数据可以列表或数组。</li>
+<li><strong>fmt：</strong>可选，定义基本格式（如颜色、标记和线条样式）。</li>
+<li>*<strong>*kwargs：</strong>可选，用在二维平面图上，设置指定属性，如标签，线的宽度等。</li>
+</ul>
+<p><strong>颜色字符：</strong>‘b’ 蓝色，’m’ 洋红色，’g’ 绿色，’y’ 黄色，’r’ 红色，’k’ 黑色，’w’ 白色，’c’ 青绿色，’#008000’ RGB 颜色符串。多条曲线不指定颜色时，会自动选择不同颜色。</p>
+<p><strong>线型参数：</strong>‘‐’ 实线，’‐‐’ 破折线，’‐.’ 点划线，’:’ 虚线。</p>
+<p><strong>标记字符：</strong>‘.’ 点标记，’,’ 像素标记(极小点)，’o’ 实心圈标记，’v’ 倒三角标记，’^’ 上三角标记，’&gt;’ 右三角标记，’&lt;’ 左三角标记…等等。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226184738175.png" class="">
+
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226185408622.png" class="">
+
+<h2 id="Matplotlib-绘图标记"><a href="#Matplotlib-绘图标记" class="headerlink" title="Matplotlib 绘图标记"></a>Matplotlib 绘图标记</h2><p>绘图过程如果我们想要给坐标自定义一些不一样的标记，就可以使用 <strong>plot()</strong> 方法的 <strong>marker</strong> 参数来定义。</p>
+<p><strong>marker</strong> 可以定义的符号如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">标记</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">“.”</td>
+<td align="left">点</td>
+</tr>
+<tr>
+<td align="left">“,”</td>
+<td align="left">像素点</td>
+</tr>
+<tr>
+<td align="left">“o”</td>
+<td align="left">实心圆</td>
+</tr>
+<tr>
+<td align="left">…</td>
+<td align="left">…</td>
+</tr>
+<tr>
+<td align="left"><strong>fmt 参数</strong></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>fmt 参数定义了基本格式，如标记、线条样式和颜色。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt = &#x27;[marker][line][color]&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>实例:例如 <strong>o:r</strong>，<strong>o</strong> 表示实心圆标记，**:** 表示虚线，<strong>r</strong> 表示颜色为红色。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">ypoints = np.array([<span class="number">6</span>, <span class="number">2</span>, <span class="number">13</span>, <span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">plt.plot(ypoints, <span class="string">&#x27;o:r&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+image-20230226200322478](image-20230226200322478.png)
+
+<p><strong>线类型：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">线类型标记</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">‘-‘</td>
+<td align="left">实线</td>
+</tr>
+<tr>
+<td align="left">‘:’</td>
+<td align="left">虚线</td>
+</tr>
+<tr>
+<td align="left">‘–’</td>
+<td align="left">破折线</td>
+</tr>
+<tr>
+<td align="left">‘-.’</td>
+<td align="left">点划线</td>
+</tr>
+</tbody></table>
+<p><strong>颜色类型：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">颜色标记</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">‘r’</td>
+<td align="left">红色</td>
+</tr>
+<tr>
+<td align="left">‘g’</td>
+<td align="left">绿色</td>
+</tr>
+<tr>
+<td align="left">‘b’</td>
+<td align="left">蓝色</td>
+</tr>
+<tr>
+<td align="left">‘c’</td>
+<td align="left">青色</td>
+</tr>
+<tr>
+<td align="left">‘m’</td>
+<td align="left">品红</td>
+</tr>
+<tr>
+<td align="left">‘y’</td>
+<td align="left">黄色</td>
+</tr>
+<tr>
+<td align="left">‘k’</td>
+<td align="left">黑色</td>
+</tr>
+<tr>
+<td align="left">‘w’</td>
+<td align="left">白色</td>
+</tr>
+</tbody></table>
+<p><strong>标记大小与颜色</strong></p>
+<p>我们可以自定义标记的大小与颜色，使用的参数分别是：</p>
+<ul>
+<li>markersize，简写为 <strong>ms</strong>：定义标记的大小。</li>
+<li>markerfacecolor，简写为 <strong>mfc</strong>：定义标记内部的颜色。</li>
+<li>markeredgecolor，简写为 <strong>mec</strong>：定义标记边框的颜色。</li>
+</ul>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226200717092.png" class="">
+
+<h2 id="Matplotlib-绘图线"><a href="#Matplotlib-绘图线" class="headerlink" title="Matplotlib 绘图线"></a>Matplotlib 绘图线</h2><p>绘图过程如果我们自定义线的样式，包括线的类型、颜色和大小等。</p>
+<p><strong>线的类型</strong></p>
+<p>线的类型可以使用 <strong>linestyle</strong> 参数来定义，简写为 <strong>ls</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">简写</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">‘solid’ (默认)</td>
+<td align="left">‘-‘</td>
+<td align="left">实线</td>
+</tr>
+<tr>
+<td align="left">‘dotted’</td>
+<td align="left">‘:’</td>
+<td align="left">点虚线</td>
+</tr>
+<tr>
+<td align="left">‘dashed’</td>
+<td align="left">‘–’</td>
+<td align="left">破折线</td>
+</tr>
+<tr>
+<td align="left">‘dashdot’</td>
+<td align="left">‘-.’</td>
+<td align="left">点划线</td>
+</tr>
+<tr>
+<td align="left">‘None’</td>
+<td align="left">‘’ 或 ‘ ‘</td>
+<td align="left">不画线</td>
+</tr>
+</tbody></table>
+<p><strong>线的颜色</strong></p>
+<p>线的颜色可以使用 <strong>color</strong> 参数来定义，简写为 <strong>c</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">颜色标记</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">‘r’</td>
+<td align="left">红色</td>
+</tr>
+<tr>
+<td align="left">‘g’</td>
+<td align="left">绿色</td>
+</tr>
+<tr>
+<td align="left">‘b’</td>
+<td align="left">蓝色</td>
+</tr>
+<tr>
+<td align="left">‘c’</td>
+<td align="left">青色</td>
+</tr>
+<tr>
+<td align="left">‘m’</td>
+<td align="left">品红</td>
+</tr>
+<tr>
+<td align="left">‘y’</td>
+<td align="left">黄色</td>
+</tr>
+<tr>
+<td align="left">‘k’</td>
+<td align="left">黑色</td>
+</tr>
+<tr>
+<td align="left">‘w’</td>
+<td align="left">白色</td>
+</tr>
+</tbody></table>
+<p>当然也可以自定义颜色类型，例如：<strong>SeaGreen、#8FBC8F</strong> 等，完整样式可以参考 <a target="_blank" rel="noopener" href="https://www.runoob.com/html/html-colorvalues.html">HTML 颜色值</a>。</p>
+<p><strong>线的宽度</strong></p>
+<p>线的宽度可以使用 <strong>linewidth</strong> 参数来定义，简写为 <strong>lw</strong>，值可以是浮点数，如：<strong>1</strong>、<strong>2.0</strong>、<strong>5.67</strong> 等。</p>
+<p><strong>多条线</strong></p>
+<p>plot() 方法中可以包含多对 x,y 值来绘制多条线。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226201622460.png" class="">
+
+<h2 id="Matplotlib-轴标签和标题"><a href="#Matplotlib-轴标签和标题" class="headerlink" title="Matplotlib 轴标签和标题"></a>Matplotlib 轴标签和标题</h2><p>我们可以使用 <strong>xlabel()</strong> 和 <strong>ylabel()</strong> 方法来设置 x 轴和 y 轴的标签。</p>
+<p><strong>标题</strong></p>
+<p>我们可以使用 <strong>title()</strong> 方法来设置标题。</p>
+<p><strong>图形中文显示</strong></p>
+<p>Matplotlib 默认情况不支持中文，我们可以使用以下简单的方法来解决。</p>
+<p>这里我们使用思源黑体，思源黑体是 Adobe 与 Google 推出的一款开源字体。</p>
+<p>官网：<a target="_blank" rel="noopener" href="https://source.typekit.com/source-han-serif/cn/">https://source.typekit.com/source-han-serif/cn/</a></p>
+<p>GitHub 地址：<a target="_blank" rel="noopener" href="https://github.com/adobe-fonts/source-han-sans/tree/release/OTF/SimplifiedChinese">https://github.com/adobe-fonts/source-han-sans/tree/release/OTF/SimplifiedChinese</a></p>
+<p><strong>标题与标签的定位</strong></p>
+<p><strong>title()</strong> 方法提供了 <strong>loc</strong> 参数来设置标题显示的位置，可以设置为: **’left’, ‘right’, 和 ‘center’， 默认值为 ‘center’**。</p>
+<p><strong>xlabel()</strong> 方法提供了 <strong>loc</strong> 参数来设置 x 轴显示的位置，可以设置为: **’left’, ‘right’, 和 ‘center’， 默认值为 ‘center’**。</p>
+<p><strong>ylabel()</strong> 方法提供了 <strong>loc</strong> 参数来设置 y 轴显示的位置，可以设置为: **’bottom’, ‘top’, 和 ‘center’， 默认值为 ‘center’**。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226203227138.png" class="">
+
+<h2 id="Matplotlib-网格线"><a href="#Matplotlib-网格线" class="headerlink" title="Matplotlib 网格线"></a>Matplotlib 网格线</h2><p>我们可以使用 pyplot 中的 grid() 方法来设置图表中的网格线。</p>
+<p>grid() 方法语法格式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matplotlib.pyplot.grid(b=<span class="literal">None</span>, which=<span class="string">&#x27;major&#x27;</span>, axis=<span class="string">&#x27;both&#x27;</span>, )</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong>b</strong>：可选，默认为 None，可以设置布尔值，true 为显示网格线，false 为不显示，如果设置 **kwargs 参数，则值为 true。</li>
+<li><strong>which</strong>：可选，可选值有 ‘major’、’minor’ 和 ‘both’，默认为 ‘major’，表示应用更改的网格线。</li>
+<li><strong>axis</strong>：可选，设置显示哪个方向的网格线，可以是取 ‘both’（默认），’x’ 或 ‘y’，分别表示两个方向，x 轴方向或 y 轴方向。</li>
+<li>*<strong>*kwargs</strong>：可选，设置网格样式，可以是 color&#x3D;’r’, linestyle&#x3D;’-‘ 和 linewidth&#x3D;2，分别表示网格线的颜色，样式和宽度。</li>
+</ul>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226203616576.png" class="">
+
+<p>以下实例添加一个简单的网格线，并设置网格线的样式，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grid(color = &#x27;color&#x27;, linestyle = &#x27;linestyle&#x27;, linewidth = number)</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<p><strong>color：</strong>‘b’ 蓝色，’m’ 洋红色，’g’ 绿色，’y’ 黄色，’r’ 红色，’k’ 黑色，’w’ 白色，’c’ 青绿色，’#008000’ RGB 颜色符串。</p>
+<p><strong>linestyle：</strong>‘‐’ 实线，’‐‐’ 破折线，’‐.’ 点划线，’:’ 虚线。</p>
+<p><strong>linewidth</strong>：设置线的宽度，可以设置一个数字。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226204117105.png" class="">
+
+<h2 id="Matplotlib-绘制多图"><a href="#Matplotlib-绘制多图" class="headerlink" title="Matplotlib 绘制多图"></a>Matplotlib 绘制多图</h2><p>我们可以使用 pyplot 中的 <strong>subplot()</strong> 和 <strong>subplots()</strong> 方法来绘制多个子图。</p>
+<p><strong>subplot()</strong> 方法在绘图时需要指定位置，<strong>subplots()</strong> 方法可以一次生成多个，在调用时只需要调用生成对象的 ax 即可。</p>
+<p><strong>subplot</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">subplot(nrows, ncols, index, **kwargs)</span><br><span class="line">subplot(pos, **kwargs)</span><br><span class="line">subplot(**kwargs)</span><br><span class="line">subplot(ax)</span><br></pre></td></tr></table></figure>
+
+<p>以上函数将整个绘图区域分成 nrows 行和 ncols 列，然后从左到右，从上到下的顺序对每个子区域进行编号 <strong>1…N</strong> ，左上的子区域的编号为 1、右下的区域编号为 N，编号可以通过参数 <strong>index</strong> 来设置。</p>
+<p>设置 numRows ＝ 1，numCols ＝ 2，就是将图表绘制成 1x2 的图片区域, 对应的坐标为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(1, 1), (1, 2)</span><br></pre></td></tr></table></figure>
+
+<p><strong>plotNum ＝ 1</strong>, 表示的坐标为(1, 1), 即第一行第一列的子图。</p>
+<p><strong>plotNum ＝ 2</strong>, 表示的坐标为(1, 2), 即第一行第二列的子图。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226205116439.png" class="">
+
+<p>设置 numRows ＝ 2，numCols ＝ 2，就是将图表绘制成 2x2 的图片区域, 对应的坐标为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(1, 1), (1, 2)</span><br><span class="line">(2, 1), (2, 2)</span><br></pre></td></tr></table></figure>
+
+<p><strong>plotNum ＝ 1</strong>, 表示的坐标为(1, 1), 即第一行第一列的子图。</p>
+<p><strong>plotNum ＝ 2</strong>, 表示的坐标为(1, 2), 即第一行第二列的子图。</p>
+<p><strong>plotNum ＝ 3</strong>, 表示的坐标为(2, 1), 即第二行第一列的子图。</p>
+<p><strong>plotNum ＝ 4</strong>, 表示的坐标为(2, 2), 即第二行第二列的子图。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226205350635.png" class="">
+
+<p><strong>subplots()</strong></p>
+<p>subplots() 方法语法格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matplotlib.pyplot.subplots(nrows=1, ncols=1, *, sharex=False, sharey=False, squeeze=True, subplot_kw=None, gridspec_kw=None, **fig_kw)</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong>nrows</strong>：默认为 1，设置图表的行数。</li>
+<li><strong>ncols</strong>：默认为 1，设置图表的列数。</li>
+<li><strong>sharex、sharey</strong>：设置 x、y 轴是否共享属性，默认为 false，可设置为 ‘none’、’all’、’row’ 或 ‘col’。 False 或 none 每个子图的 x 轴或 y 轴都是独立的，True 或 ‘all’：所有子图共享 x 轴或 y 轴，’row’ 设置每个子图行共享一个 x 轴或 y 轴，’col’：设置每个子图列共享一个 x 轴或 y 轴。</li>
+<li><strong>squeeze</strong>：布尔值，默认为 True，表示额外的维度从返回的 Axes(轴)对象中挤出，对于 N<em>1 或 1</em>N 个子图，返回一个 1 维数组，对于 N*M，N&gt;1 和 M&gt;1 返回一个 2 维数组。如果设置为 False，则不进行挤压操作，返回一个元素为 Axes 实例的2维数组，即使它最终是1x1。</li>
+<li><strong>subplot_kw</strong>：可选，字典类型。把字典的关键字传递给 add_subplot() 来创建每个子图。</li>
+<li><strong>gridspec_kw</strong>：可选，字典类型。把字典的关键字传递给 GridSpec 构造函数创建子图放在网格里(grid)。</li>
+<li>*<strong>*fig_kw</strong>：把详细的关键字参数传给 figure() 函数。</li>
+</ul>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226210152767.png" class="">
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一些测试数据 -- 图1</span></span><br><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">2</span>*np.pi, <span class="number">400</span>)</span><br><span class="line">y = np.sin(x**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个画像和子图 -- 图2</span></span><br><span class="line">fig, ax = plt.subplots()</span><br><span class="line">ax.plot(x, y)</span><br><span class="line">ax.set_title(<span class="string">&#x27;Simple plot&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建两个子图 -- 图3</span></span><br><span class="line">f, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, sharey=<span class="literal">True</span>)</span><br><span class="line">ax1.plot(x, y)</span><br><span class="line">ax1.set_title(<span class="string">&#x27;Sharing Y axis&#x27;</span>)</span><br><span class="line">ax2.scatter(x, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建四个子图 -- 图4</span></span><br><span class="line">fig, axs = plt.subplots(<span class="number">2</span>, <span class="number">2</span>, subplot_kw=<span class="built_in">dict</span>(projection=<span class="string">&quot;polar&quot;</span>))</span><br><span class="line">axs[<span class="number">0</span>, <span class="number">0</span>].plot(x, y)</span><br><span class="line">axs[<span class="number">1</span>, <span class="number">1</span>].scatter(x, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共享 x 轴</span></span><br><span class="line">plt.subplots(<span class="number">2</span>, <span class="number">2</span>, sharex=<span class="string">&#x27;col&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共享 y 轴</span></span><br><span class="line">plt.subplots(<span class="number">2</span>, <span class="number">2</span>, sharey=<span class="string">&#x27;row&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共享 x 轴和 y 轴</span></span><br><span class="line">plt.subplots(<span class="number">2</span>, <span class="number">2</span>, sharex=<span class="string">&#x27;all&#x27;</span>, sharey=<span class="string">&#x27;all&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个也是共享 x 轴和 y 轴</span></span><br><span class="line">plt.subplots(<span class="number">2</span>, <span class="number">2</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建标识为 10 的图，已经存在的则删除</span></span><br><span class="line">fig, ax = plt.subplots(num=<span class="number">10</span>, clear=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<h2 id="Matplotlib-散点图"><a href="#Matplotlib-散点图" class="headerlink" title="Matplotlib 散点图"></a>Matplotlib 散点图</h2><p>我们可以使用 pyplot 中的 scatter() 方法来绘制散点图。</p>
+<p>scatter() 方法语法格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, *, edgecolors=None, plotnonfinite=False, data=None, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<p><strong>x，y</strong>：长度相同的数组，也就是我们即将绘制散点图的数据点，输入数据。</p>
+<p><strong>s</strong>：点的大小，默认 20，也可以是个数组，数组每个参数为对应点的大小。</p>
+<p><strong>c</strong>：点的颜色，默认蓝色 ‘b’，也可以是个 RGB 或 RGBA 二维行数组。</p>
+<p><strong>marker</strong>：点的样式，默认小圆圈 ‘o’。</p>
+<p><strong>cmap</strong>：Colormap，默认 None，标量或者是一个 colormap 的名字，只有 c 是一个浮点数数组的时才使用。如果没有申明就是 image.cmap。</p>
+<p><strong>norm</strong>：Normalize，默认 None，数据亮度在 0-1 之间，只有 c 是一个浮点数的数组的时才使用。</p>
+<p><strong>vmin，vmax：</strong>：亮度设置，在 norm 参数存在时会忽略。</p>
+<p><strong>alpha：</strong>：透明度设置，0-1 之间，默认 None，即不透明。</p>
+<p><strong>linewidths：</strong>：标记点的长度。</p>
+<p><strong>edgecolors：</strong>：颜色或颜色序列，默认为 ‘face’，可选值有 ‘face’, ‘none’, None。</p>
+<p><strong>plotnonfinite：</strong>：布尔值，设置是否使用非限定的 c ( inf, -inf 或 nan) 绘制点。</p>
+<p>*<strong>*kwargs：</strong>：其他参数。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226215018315.png" class="">
+
+<p><strong>颜色条 Colormap</strong></p>
+<p>Matplotlib 模块提供了很多可用的颜色条。</p>
+<p>颜色条就像一个颜色列表，其中每种颜色都有一个范围从 0 到 100 的值。</p>
+<p>下面是一个颜色条的例子：</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/img_colorbar.png" class="">
+
+<p>设置颜色条需要使用 cmap 参数，默认值为 ‘viridis’，之后颜色值设置为 0 到 100 的数组。</p>
+<p>如果要显示颜色条，需要使用 <strong>plt.colorbar()</strong> 方法</p>
+<p>颜色条参数值可以是以下值：</p>
+<table>
+<thead>
+<tr>
+<th align="left">颜色名称</th>
+<th align="left"></th>
+<th align="left">保留关键字</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Accent</td>
+<td align="left"></td>
+<td align="left">Accent_r</td>
+</tr>
+<tr>
+<td align="left">Blues</td>
+<td align="left"></td>
+<td align="left">Blues_r</td>
+</tr>
+<tr>
+<td align="left">BrBG</td>
+<td align="left"></td>
+<td align="left">BrBG_r</td>
+</tr>
+<tr>
+<td align="left">BuGn</td>
+<td align="left"></td>
+<td align="left">BuGn_r</td>
+</tr>
+<tr>
+<td align="left">BuPu</td>
+<td align="left"></td>
+<td align="left">BuPu_r</td>
+</tr>
+<tr>
+<td align="left">CMRmap</td>
+<td align="left"></td>
+<td align="left">CMRmap_r</td>
+</tr>
+<tr>
+<td align="left">Dark2</td>
+<td align="left"></td>
+<td align="left">Dark2_r</td>
+</tr>
+<tr>
+<td align="left">GnBu</td>
+<td align="left"></td>
+<td align="left">GnBu_r</td>
+</tr>
+<tr>
+<td align="left">Greens</td>
+<td align="left"></td>
+<td align="left">Greens_r</td>
+</tr>
+<tr>
+<td align="left">Greys</td>
+<td align="left"></td>
+<td align="left">Greys_r</td>
+</tr>
+<tr>
+<td align="left">OrRd</td>
+<td align="left"></td>
+<td align="left">OrRd_r</td>
+</tr>
+<tr>
+<td align="left">Oranges</td>
+<td align="left"></td>
+<td align="left">Oranges_r</td>
+</tr>
+<tr>
+<td align="left">PRGn</td>
+<td align="left"></td>
+<td align="left">PRGn_r</td>
+</tr>
+<tr>
+<td align="left">Paired</td>
+<td align="left"></td>
+<td align="left">Paired_r</td>
+</tr>
+<tr>
+<td align="left">Pastel1</td>
+<td align="left"></td>
+<td align="left">Pastel1_r</td>
+</tr>
+<tr>
+<td align="left">Pastel2</td>
+<td align="left"></td>
+<td align="left">Pastel2_r</td>
+</tr>
+<tr>
+<td align="left">PiYG</td>
+<td align="left"></td>
+<td align="left">PiYG_r</td>
+</tr>
+<tr>
+<td align="left">PuBu</td>
+<td align="left"></td>
+<td align="left">PuBu_r</td>
+</tr>
+<tr>
+<td align="left">PuBuGn</td>
+<td align="left"></td>
+<td align="left">PuBuGn_r</td>
+</tr>
+<tr>
+<td align="left">PuOr</td>
+<td align="left"></td>
+<td align="left">PuOr_r</td>
+</tr>
+<tr>
+<td align="left">PuRd</td>
+<td align="left"></td>
+<td align="left">PuRd_r</td>
+</tr>
+<tr>
+<td align="left">Purples</td>
+<td align="left"></td>
+<td align="left">Purples_r</td>
+</tr>
+<tr>
+<td align="left">RdBu</td>
+<td align="left"></td>
+<td align="left">RdBu_r</td>
+</tr>
+<tr>
+<td align="left">RdGy</td>
+<td align="left"></td>
+<td align="left">RdGy_r</td>
+</tr>
+<tr>
+<td align="left">RdPu</td>
+<td align="left"></td>
+<td align="left">RdPu_r</td>
+</tr>
+<tr>
+<td align="left">RdYlBu</td>
+<td align="left"></td>
+<td align="left">RdYlBu_r</td>
+</tr>
+<tr>
+<td align="left">RdYlGn</td>
+<td align="left"></td>
+<td align="left">RdYlGn_r</td>
+</tr>
+<tr>
+<td align="left">Reds</td>
+<td align="left"></td>
+<td align="left">Reds_r</td>
+</tr>
+<tr>
+<td align="left">Set1</td>
+<td align="left"></td>
+<td align="left">Set1_r</td>
+</tr>
+<tr>
+<td align="left">Set2</td>
+<td align="left"></td>
+<td align="left">Set2_r</td>
+</tr>
+<tr>
+<td align="left">Set3</td>
+<td align="left"></td>
+<td align="left">Set3_r</td>
+</tr>
+<tr>
+<td align="left">Spectral</td>
+<td align="left"></td>
+<td align="left">Spectral_r</td>
+</tr>
+<tr>
+<td align="left">Wistia</td>
+<td align="left"></td>
+<td align="left">Wistia_r</td>
+</tr>
+<tr>
+<td align="left">YlGn</td>
+<td align="left"></td>
+<td align="left">YlGn_r</td>
+</tr>
+<tr>
+<td align="left">YlGnBu</td>
+<td align="left"></td>
+<td align="left">YlGnBu_r</td>
+</tr>
+<tr>
+<td align="left">YlOrBr</td>
+<td align="left"></td>
+<td align="left">YlOrBr_r</td>
+</tr>
+<tr>
+<td align="left">YlOrRd</td>
+<td align="left"></td>
+<td align="left">YlOrRd_r</td>
+</tr>
+<tr>
+<td align="left">afmhot</td>
+<td align="left"></td>
+<td align="left">afmhot_r</td>
+</tr>
+<tr>
+<td align="left">autumn</td>
+<td align="left"></td>
+<td align="left">autumn_r</td>
+</tr>
+<tr>
+<td align="left">binary</td>
+<td align="left"></td>
+<td align="left">binary_r</td>
+</tr>
+<tr>
+<td align="left">bone</td>
+<td align="left"></td>
+<td align="left">bone_r</td>
+</tr>
+<tr>
+<td align="left">brg</td>
+<td align="left"></td>
+<td align="left">brg_r</td>
+</tr>
+<tr>
+<td align="left">bwr</td>
+<td align="left"></td>
+<td align="left">bwr_r</td>
+</tr>
+<tr>
+<td align="left">cividis</td>
+<td align="left"></td>
+<td align="left">cividis_r</td>
+</tr>
+<tr>
+<td align="left">cool</td>
+<td align="left"></td>
+<td align="left">cool_r</td>
+</tr>
+<tr>
+<td align="left">coolwarm</td>
+<td align="left"></td>
+<td align="left">coolwarm_r</td>
+</tr>
+<tr>
+<td align="left">copper</td>
+<td align="left"></td>
+<td align="left">copper_r</td>
+</tr>
+<tr>
+<td align="left">cubehelix</td>
+<td align="left"></td>
+<td align="left">cubehelix_r</td>
+</tr>
+<tr>
+<td align="left">flag</td>
+<td align="left"></td>
+<td align="left">flag_r</td>
+</tr>
+<tr>
+<td align="left">gist_earth</td>
+<td align="left"></td>
+<td align="left">gist_earth_r</td>
+</tr>
+<tr>
+<td align="left">gist_gray</td>
+<td align="left"></td>
+<td align="left">gist_gray_r</td>
+</tr>
+<tr>
+<td align="left">gist_heat</td>
+<td align="left"></td>
+<td align="left">gist_heat_r</td>
+</tr>
+<tr>
+<td align="left">gist_ncar</td>
+<td align="left"></td>
+<td align="left">gist_ncar_r</td>
+</tr>
+<tr>
+<td align="left">gist_rainbow</td>
+<td align="left"></td>
+<td align="left">gist_rainbow_r</td>
+</tr>
+<tr>
+<td align="left">gist_stern</td>
+<td align="left"></td>
+<td align="left">gist_stern_r</td>
+</tr>
+<tr>
+<td align="left">gist_yarg</td>
+<td align="left"></td>
+<td align="left">gist_yarg_r</td>
+</tr>
+<tr>
+<td align="left">gnuplot</td>
+<td align="left"></td>
+<td align="left">gnuplot_r</td>
+</tr>
+<tr>
+<td align="left">gnuplot2</td>
+<td align="left"></td>
+<td align="left">gnuplot2_r</td>
+</tr>
+<tr>
+<td align="left">gray</td>
+<td align="left"></td>
+<td align="left">gray_r</td>
+</tr>
+<tr>
+<td align="left">hot</td>
+<td align="left"></td>
+<td align="left">hot_r</td>
+</tr>
+<tr>
+<td align="left">hsv</td>
+<td align="left"></td>
+<td align="left">hsv_r</td>
+</tr>
+<tr>
+<td align="left">inferno</td>
+<td align="left"></td>
+<td align="left">inferno_r</td>
+</tr>
+<tr>
+<td align="left">jet</td>
+<td align="left"></td>
+<td align="left">jet_r</td>
+</tr>
+<tr>
+<td align="left">magma</td>
+<td align="left"></td>
+<td align="left">magma_r</td>
+</tr>
+<tr>
+<td align="left">nipy_spectral</td>
+<td align="left"></td>
+<td align="left">nipy_spectral_r</td>
+</tr>
+<tr>
+<td align="left">ocean</td>
+<td align="left"></td>
+<td align="left">ocean_r</td>
+</tr>
+<tr>
+<td align="left">pink</td>
+<td align="left"></td>
+<td align="left">pink_r</td>
+</tr>
+<tr>
+<td align="left">plasma</td>
+<td align="left"></td>
+<td align="left">plasma_r</td>
+</tr>
+<tr>
+<td align="left">prism</td>
+<td align="left"></td>
+<td align="left">prism_r</td>
+</tr>
+<tr>
+<td align="left">rainbow</td>
+<td align="left"></td>
+<td align="left">rainbow_r</td>
+</tr>
+<tr>
+<td align="left">seismic</td>
+<td align="left"></td>
+<td align="left">seismic_r</td>
+</tr>
+<tr>
+<td align="left">spring</td>
+<td align="left"></td>
+<td align="left">spring_r</td>
+</tr>
+<tr>
+<td align="left">summer</td>
+<td align="left"></td>
+<td align="left">summer_r</td>
+</tr>
+<tr>
+<td align="left">tab10</td>
+<td align="left"></td>
+<td align="left">tab10_r</td>
+</tr>
+<tr>
+<td align="left">tab20</td>
+<td align="left"></td>
+<td align="left">tab20_r</td>
+</tr>
+<tr>
+<td align="left">tab20b</td>
+<td align="left"></td>
+<td align="left">tab20b_r</td>
+</tr>
+<tr>
+<td align="left">tab20c</td>
+<td align="left"></td>
+<td align="left">tab20c_r</td>
+</tr>
+<tr>
+<td align="left">terrain</td>
+<td align="left"></td>
+<td align="left">terrain_r</td>
+</tr>
+<tr>
+<td align="left">twilight</td>
+<td align="left"></td>
+<td align="left">twilight_r</td>
+</tr>
+<tr>
+<td align="left">twilight_shifted</td>
+<td align="left"></td>
+<td align="left">twilight_shifted_r</td>
+</tr>
+<tr>
+<td align="left">viridis</td>
+<td align="left"></td>
+<td align="left">viridis_r</td>
+</tr>
+<tr>
+<td align="left">winter</td>
+<td align="left"></td>
+<td align="left">winter_r</td>
+</tr>
+</tbody></table>
+img](sphx_glr_colormaps_001.webp)
+
+img](sphx_glr_colormaps_002.webp)
+
+img](sphx_glr_colormaps_003.webp)
+
+img](sphx_glr_colormaps_004.webp)
+
+img](sphx_glr_colormaps_005.webp)
+
+img](sphx_glr_colormaps_006.webp)
+
+img](sphx_glr_colormaps_007.webp)
+
+<h2 id="Matplotlib-柱形图"><a href="#Matplotlib-柱形图" class="headerlink" title="Matplotlib 柱形图"></a>Matplotlib 柱形图</h2><p>我们可以使用 pyplot 中的 bar() 方法来绘制柱形图。</p>
+<p>bar() 方法语法格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matplotlib.pyplot.bar(x, height, width=0.8, bottom=None, *, align=&#x27;center&#x27;, data=None, **kwargs)</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<p><strong>x</strong>：浮点型数组，柱形图的 x 轴数据。</p>
+<p><strong>height</strong>：浮点型数组，柱形图的高度。</p>
+<p><strong>width</strong>：浮点型数组，柱形图的宽度。</p>
+<p><strong>bottom</strong>：浮点型数组，底座的 y 坐标，默认 0。</p>
+<p><strong>align</strong>：柱形图与 x 坐标的对齐方式，’center’ 以 x 位置为中心，这是默认值。 ‘edge’：将柱形图的左边缘与 x 位置对齐。要对齐右边缘的条形，可以传递负数的宽度值及 align&#x3D;’edge’。</p>
+<p>*<strong>*kwargs：</strong>：其他参数。</p>
+<p>垂直方向的柱形图可以使用 <strong>barh()</strong> 方法来设置，水平用bar()</p>
+<p>设置柱形图宽度，<strong>bar()</strong> 方法使用 <strong>width</strong> 设置，<strong>barh()</strong> 方法使用 <strong>height</strong> 设置 height</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226214537178.png" class="">
+
+<h2 id="Matplotlib-饼图"><a href="#Matplotlib-饼图" class="headerlink" title="Matplotlib 饼图"></a>Matplotlib 饼图</h2><p>我们可以使用 pyplot 中的 pie() 方法来绘制饼图。</p>
+<p>pie() 方法语法格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matplotlib.pyplot.pie(x, explode=None, labels=None, colors=None, autopct=None, pctdistance=0.6, shadow=False, labeldistance=1.1, startangle=0, radius=1, counterclock=True, wedgeprops=None, textprops=None, center=0, 0, frame=False, rotatelabels=False, *, normalize=None, data=None)[source]</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<p><strong>x</strong>：浮点型数组，表示每个扇形的面积。</p>
+<p><strong>explode</strong>：数组，表示各个扇形之间的间隔，默认值为0。</p>
+<p><strong>labels</strong>：列表，各个扇形的标签，默认值为 None。</p>
+<p><strong>colors</strong>：数组，表示各个扇形的颜色，默认值为 None。</p>
+<p><strong>autopct</strong>：设置饼图内各个扇形百分比显示格式，**%d%%** 整数百分比，**%0.1f** 一位小数， <strong>%0.1f%%</strong> 一位小数百分比， <strong>%0.2f%%</strong> 两位小数百分比。</p>
+<p><strong>labeldistance</strong>：标签标记的绘制位置，相对于半径的比例，默认值为 1.1，如 <strong>&lt;1</strong>则绘制在饼图内侧。</p>
+<p><strong>pctdistance：</strong>：类似于 labeldistance，指定 autopct 的位置刻度，默认值为 0.6。</p>
+<p><strong>shadow：</strong>：布尔值 True 或 False，设置饼图的阴影，默认为 False，不设置阴影。</p>
+<p><strong>radius：</strong>：设置饼图的半径，默认为 1。</p>
+<p><strong>startangle：</strong>：起始绘制饼图的角度，默认为从 x 轴正方向逆时针画起，如设定 &#x3D;90 则从 y 轴正方向画起。</p>
+<p><strong>counterclock</strong>：布尔值，设置指针方向，默认为 True，即逆时针，False 为顺时针。</p>
+<p><strong>wedgeprops</strong> ：字典类型，默认值 None。参数字典传递给 wedge 对象用来画一个饼图。例如：wedgeprops&#x3D;{‘linewidth’:5} 设置 wedge 线宽为5。</p>
+<p><strong>textprops</strong> ：字典类型，默认值为：None。传递给 text 对象的字典参数，用于设置标签（labels）和比例文字的格式。</p>
+<p><strong>center</strong> ：浮点类型的列表，默认值：(0,0)。用于设置图标中心位置。</p>
+<p><strong>frame</strong> ：布尔类型，默认值：False。如果是 True，绘制带有表的轴框架。</p>
+<p><strong>rotatelabels</strong> ：布尔类型，默认为 False。如果为 True，旋转每个 label 到指定的角度。</p>
+<img src="/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20230226213708282.png" class=""></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://JiqingJiang.github.io">Jiqing</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://jiqingjiang.github.io/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">http://jiqingjiang.github.io/2023/02/27/Matplotlib%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://JiqingJiang.github.io" target="_blank">erode</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Matplotlib/">Matplotlib</a></div><div class="post_share"><div class="social-share" data-image="/img/me.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/06/18/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%BC%E8%88%AA%E9%A1%B5/" title="我的浏览器导航页"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">我的浏览器导航页</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/27/NetworkX%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="networkx学习笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">networkx学习笔记</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/me.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Jiqing</div><div class="author-info__description">hi,认识一下,交个朋友吧</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JiqingJiang"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/jiqingjiang" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:2724794017@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://gitee.com/erode" target="_blank" title="Gitee"><i class="fab fa-gitee" style="color: #ff0000;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的小破站！交个朋友吧</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-Pyplot"><span class="toc-number">1.</span> <span class="toc-text">Matplotlib Pyplot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E7%BB%98%E5%9B%BE%E6%A0%87%E8%AE%B0"><span class="toc-number">2.</span> <span class="toc-text">Matplotlib 绘图标记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E7%BB%98%E5%9B%BE%E7%BA%BF"><span class="toc-number">3.</span> <span class="toc-text">Matplotlib 绘图线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E8%BD%B4%E6%A0%87%E7%AD%BE%E5%92%8C%E6%A0%87%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">Matplotlib 轴标签和标题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E7%BD%91%E6%A0%BC%E7%BA%BF"><span class="toc-number">5.</span> <span class="toc-text">Matplotlib 网格线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E7%BB%98%E5%88%B6%E5%A4%9A%E5%9B%BE"><span class="toc-number">6.</span> <span class="toc-text">Matplotlib 绘制多图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="toc-number">7.</span> <span class="toc-text">Matplotlib 散点图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E6%9F%B1%E5%BD%A2%E5%9B%BE"><span class="toc-number">8.</span> <span class="toc-text">Matplotlib 柱形图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matplotlib-%E9%A5%BC%E5%9B%BE"><span class="toc-number">9.</span> <span class="toc-text">Matplotlib 饼图</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/13/hello-world/" title="Hello World">Hello World</a><time datetime="2023-10-13T10:22:00.346Z" title="发表于 2023-10-13 18:22:00">2023-10-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/09/%E5%A6%82%E4%BD%95%E5%9C%A8Ubuntu%E4%B8%8A%E5%AE%89%E8%A3%85Pycharm/" title="如何在Ubuntu上安装Pycharm">如何在Ubuntu上安装Pycharm</a><time datetime="2023-10-09T11:02:26.000Z" title="发表于 2023-10-09 19:02:26">2023-10-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/10/04/index/" title="一些Python模块的User Guide超链接">一些Python模块的User Guide超链接</a><time datetime="2023-10-04T04:46:53.000Z" title="发表于 2023-10-04 12:46:53">2023-10-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/19/2023-09-19-1/" title="天欲福人，必先以祸敬之">天欲福人，必先以祸敬之</a><time datetime="2023-09-19T10:49:49.000Z" title="发表于 2023-09-19 18:49:49">2023-09-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/09/19/2023-09-19/" title="轻舟已过万重山">轻舟已过万重山</a><time datetime="2023-09-19T10:45:28.000Z" title="发表于 2023-09-19 18:45:28">2023-09-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Jiqing</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
