@@ -1,0 +1,775 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jiqing">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="nn.init 模块是 PyTorch 中用于初始化神经网络模型参数的模块。通过 nn.init 模块，可以对模型的权重、偏置等参数进行初始化，以帮助模型更快地收敛并获得更好的性能。torch.nn.init 此模块中的所有函数都用于初始化神经网络参数，因此它们都在 torch.no_grad() 模式下运行，autograd 不会考虑它们。    torch.nn.init.calculate_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nn.init">
+<meta property="og:url" content="http://jiqingjiang.github.io/p/edda2ce1/index.html">
+<meta property="og:site_name" content="erode">
+<meta property="og:description" content="nn.init 模块是 PyTorch 中用于初始化神经网络模型参数的模块。通过 nn.init 模块，可以对模型的权重、偏置等参数进行初始化，以帮助模型更快地收敛并获得更好的性能。torch.nn.init 此模块中的所有函数都用于初始化神经网络参数，因此它们都在 torch.no_grad() 模式下运行，autograd 不会考虑它们。    torch.nn.init.calculate_">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-10T06:27:45.000Z">
+<meta property="article:modified_time" content="2024-08-19T23:25:11.428Z">
+<meta property="article:author" content="Jiqing">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>nn.init - erode</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jiqingjiang.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>erode</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/gallery/" target="_self">
+                <i class="iconfont icon-books"></i>
+                <span>gallery</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/picture1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="nn.init"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-10 14:27" pubdate>
+          2024年8月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">nn.init</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>nn.init 模块是 PyTorch 中用于初始化神经网络模型参数的模块。通过 nn.init 模块，可以对模型的权重、偏置等参数进行初始化，以帮助模型更快地收敛并获得更好的性能。<br><code>torch.nn.init</code> 此模块中的所有函数都用于初始化神经网络参数，因此它们都在 <code>torch.no_grad()</code> 模式下运行，<code>autograd</code> 不会考虑它们。   </p>
+<h2 id="torch-nn-init-calculate-gain-nonlinearity-param-None"><a href="#torch-nn-init-calculate-gain-nonlinearity-param-None" class="headerlink" title="torch.nn.init.calculate_gain(nonlinearity, param&#x3D;None)"></a>torch.nn.init.calculate_gain(nonlinearity, param&#x3D;None)</h2><p>为了实现自归一化神经网络，你应该使用nonlinear &#x3D;’linear’而不是nonlinearity &#x3D;’selu’。这使得初始权重的方差为1&#x2F;N，这对于在前向传递中引入稳定的固定点是必要的。相比之下，SELU的默认增益牺牲了归一化效果，以获得矩形层中更稳定的梯度流。</p>
+<h4 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>nonlinearity</code>(strzm)：[nn.functional] 要计算增益的非线性函数的名称。例如，<code>relu</code>、<code>tanh</code>、<code>sigmoid</code> 等。   </li>
+<li><code>param</code>(float or None, optional)：非线性函数的参数。例如，对于 <code>LeakyReLU</code>，<code>param</code> 是负斜率。</li>
+</ul>
+<h4 id="Returns"><a href="#Returns" class="headerlink" title="Returns:"></a>Returns:</h4><p><code>gain</code>(float)：一个浮点数，表示给定非线性函数的增益。</p>
+<h4 id="Examples"><a href="#Examples" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">gain = nn.init.calculate_gain(<span class="hljs-string">&#x27;leaky_relu&#x27;</span>, <span class="hljs-number">0.2</span>)   <span class="hljs-comment"># leaky_relu with negative_slope=0.2</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-uniform-tensor-a-0-0-b-1-0-generator-None"><a href="#torch-nn-init-uniform-tensor-a-0-0-b-1-0-generator-None" class="headerlink" title="torch.nn.init.uniform_(tensor, a&#x3D;0.0, b&#x3D;1.0, generator&#x3D;None)"></a>torch.nn.init.uniform_(tensor, a&#x3D;0.0, b&#x3D;1.0, generator&#x3D;None)</h2><p>用从均匀分布中提取的值填充输入张量。</p>
+<h4 id="Parameters-1"><a href="#Parameters-1" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>a</code>(float):均匀分布的下限</li>
+<li><code>b</code>(float):均匀分布的上界</li>
+</ul>
+<h4 id="Returns-1"><a href="#Returns-1" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-1"><a href="#Examples-1" class="headerlink" title="Examples:"></a>Examples:</h4><p>nn.init.uniform_(w)后自动修改w的值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><br>w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br><span class="hljs-built_in">print</span>(w)<br>res = nn.init.uniform_(w)<br><span class="hljs-built_in">print</span>(w)<br><span class="hljs-built_in">print</span>(res)<br><span class="hljs-comment"># tensor([[1.0194e-38, 1.0469e-38, 1.0010e-38, 6.4286e-39, 9.9184e-39],</span><br><span class="hljs-comment">#         [8.4490e-39, 1.0102e-38, 9.0919e-39, 1.0102e-38, 8.9082e-39],</span><br><span class="hljs-comment">#         [8.4489e-39, 1.0102e-38, 1.0561e-38, 9.4592e-39, 1.0102e-38]])</span><br><span class="hljs-comment"># tensor([[0.2565, 0.3630, 0.4908, 0.5529, 0.4225],</span><br><span class="hljs-comment">#         [0.9944, 0.0088, 0.4067, 0.4673, 0.5027],</span><br><span class="hljs-comment">#         [0.0211, 0.9172, 0.5605, 0.1267, 0.0560]])</span><br><span class="hljs-comment"># tensor([[0.2565, 0.3630, 0.4908, 0.5529, 0.4225],</span><br><span class="hljs-comment">#         [0.9944, 0.0088, 0.4067, 0.4673, 0.5027],</span><br><span class="hljs-comment">#         [0.0211, 0.9172, 0.5605, 0.1267, 0.0560]])</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-normal-tensor-mean-0-0-std-1-0-generator-None"><a href="#torch-nn-init-normal-tensor-mean-0-0-std-1-0-generator-None" class="headerlink" title="torch.nn.init.normal_(tensor, mean&#x3D;0.0, std&#x3D;1.0, generator&#x3D;None)"></a>torch.nn.init.normal_(tensor, mean&#x3D;0.0, std&#x3D;1.0, generator&#x3D;None)</h2><p>使用从正态分布中提取的值填充输入张量。</p>
+<h4 id="Parameters-2"><a href="#Parameters-2" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>mean</code>(float):正态分布的均值</li>
+<li><code>std</code>(float):正态分布的标准差</li>
+</ul>
+<h4 id="Returns-2"><a href="#Returns-2" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-2"><a href="#Examples-2" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.normal_(w)<br>```     <br><br><span class="hljs-comment">## torch.nn.init.constant_(tensor, val)</span><br>用标量值val填充输入张量。<br><br><span class="hljs-comment">#### Parameters:  </span><br>- `tensor`(Tensor): 一个 N 维张量torch.Tensor<br>- `val`(<span class="hljs-built_in">float</span>): 填充值<br><br><span class="hljs-comment">#### Returns:  </span><br>-  `Tensor` :返回一个张量，同时参数也会自动更新<br><br><span class="hljs-comment">#### Examples:</span><br>```python<br>w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.constant_(w, <span class="hljs-number">0.5</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-ones-tensor"><a href="#torch-nn-init-ones-tensor" class="headerlink" title="torch.nn.init.ones_(tensor)"></a>torch.nn.init.ones_(tensor)</h2><p>用标量值1填充输入张量。</p>
+<h4 id="Parameters-3"><a href="#Parameters-3" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+</ul>
+<h4 id="Returns-3"><a href="#Returns-3" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-3"><a href="#Examples-3" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.ones_(w)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-zeros-tensor"><a href="#torch-nn-init-zeros-tensor" class="headerlink" title="torch.nn.init.zeros_(tensor)"></a>torch.nn.init.zeros_(tensor)</h2><p>用标量值0填充输入张量。</p>
+<h4 id="Parameters-4"><a href="#Parameters-4" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+</ul>
+<h4 id="Returns-4"><a href="#Returns-4" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-4"><a href="#Examples-4" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.zeros_(w)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-eye-tensor-out-None"><a href="#torch-nn-init-eye-tensor-out-None" class="headerlink" title="torch.nn.init.eye_(tensor, out&#x3D;None)"></a>torch.nn.init.eye_(tensor, out&#x3D;None)</h2><p>用单位矩阵填充二维输入张量。<br>保留线性层中输入的标识，其中保留尽可能多的输入。</p>
+<h4 id="Parameters-5"><a href="#Parameters-5" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个二维张量torch.Tensor</li>
+</ul>
+<h4 id="Returns-5"><a href="#Returns-5" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个二维张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-5"><a href="#Examples-5" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.eye_(w)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-dirac-tensor-groups-1"><a href="#torch-nn-init-dirac-tensor-groups-1" class="headerlink" title="torch.nn.init.dirac_(tensor, groups&#x3D;1)"></a>torch.nn.init.dirac_(tensor, groups&#x3D;1)</h2><p>用狄拉克函数填充{3，4，5}维输入张量。<br>保留卷积层中输入的标识，其中保留尽可能多的输入通道。在组&gt;1的情况下，每个通道组保持同一性</p>
+<h4 id="Parameters-6"><a href="#Parameters-6" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 {3,4,5} 维张量torch.Tensor</li>
+<li><code>groups</code>(int):每个输入通道的组数</li>
+</ul>
+<h4 id="Returns-6"><a href="#Returns-6" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-6"><a href="#Examples-6" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">16</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>)<br>nn.init.dirac_(w)<br>w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">24</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>)<br>nn.init.dirac_(w, <span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-xavier-uniform-tensor-gain-1-0-generator-None"><a href="#torch-nn-init-xavier-uniform-tensor-gain-1-0-generator-None" class="headerlink" title="torch.nn.init.xavier_uniform_(tensor, gain&#x3D;1.0, generator&#x3D;None)"></a>torch.nn.init.xavier_uniform_(tensor, gain&#x3D;1.0, generator&#x3D;None)</h2><p>使用Xavier均匀分布填充输入张量。<br>根据Glorot, X.和Bengio, Y.在《Understanding the difficulty of training deep feedforward neural networks》中描述的方法，用一个均匀分布生成值，填充输入的张量或变量。结果张量中的值采样自 $U(−a, a)$，其中：$$a&#x3D;\text{gain}\times\sqrt{\frac6{\text{fan}_\text{in}+\text{fan}_\text{out}}}$$   </p>
+<h4 id="Parameters-7"><a href="#Parameters-7" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>gain</code>(float, optional):可缩放因子</li>
+</ul>
+<h4 id="Returns-7"><a href="#Returns-7" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-7"><a href="#Examples-7" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.xavier_uniform_(w, gain=nn.init.calculate_gain(<span class="hljs-string">&#x27;relu&#x27;</span>))<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-xavier-normal-tensor-gain-1-0-generator-None"><a href="#torch-nn-init-xavier-normal-tensor-gain-1-0-generator-None" class="headerlink" title="torch.nn.init.xavier_normal_(tensor, gain&#x3D;1.0, generator&#x3D;None)"></a>torch.nn.init.xavier_normal_(tensor, gain&#x3D;1.0, generator&#x3D;None)</h2><p>使用Xavier正态分布填充输入张量。<br>根据Glorot, X.和Bengio, Y.在《Understanding the difficulty of training deep feedforward neural networks》中描述的方法，用一个正态分布生成值，填充输入的张量或变量。结果张量中的值采样自 $N(0,\text{std}^2)$ 的正态分布，其中标准差：$$\mathrm{std}&#x3D;\mathrm{gain}\times\sqrt{\frac2{\mathrm{fan}_\mathrm{in}+\mathrm{fan}_\mathrm{out}}}$$</p>
+<h4 id="Parameters-8"><a href="#Parameters-8" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>gain</code>(float, optional):可缩放因子</li>
+</ul>
+<h4 id="Returns-8"><a href="#Returns-8" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-8"><a href="#Examples-8" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.xavier_normal_(w)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-kaiming-uniform-tensor-a-0-mode-’fan-in’-nonlinearity-’leaky-relu’-generator-None"><a href="#torch-nn-init-kaiming-uniform-tensor-a-0-mode-’fan-in’-nonlinearity-’leaky-relu’-generator-None" class="headerlink" title="torch.nn.init.kaiming_uniform_(tensor, a&#x3D;0, mode&#x3D;’fan_in’, nonlinearity&#x3D;’leaky_relu’, generator&#x3D;None)"></a>torch.nn.init.kaiming_uniform_(tensor, a&#x3D;0, mode&#x3D;’fan_in’, nonlinearity&#x3D;’leaky_relu’, generator&#x3D;None)</h2><p>使用Kaiming均匀分布填充输入张量。<br>根据He, K等人于2015年在《Delving deep into rectifiers: Surpassing human-level performance on ImageNet classification》中描述的方法，用一个均匀分布生成值，填充输入的张量或变量。结果张量中的值采样自 $U(−bound,bound)$，其中：$$\mathrm{bound}&#x3D;\mathrm{gain}\times\sqrt{\frac{3}{\mathrm{fan_mode}}}$$</p>
+<h4 id="Parameters-9"><a href="#Parameters-9" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>a</code>(float, optional):用于计算负斜率的Leaky ReLU参数,（仅与’leaky_relu’一起使用）</li>
+<li><code>mode</code>(str, optional): 可以为fan_in或fan_out。若为fan_in则保留前向传播时权值方差的量级，若为fan_out则保留反向传播时的量级，默认值为fan_in。</li>
+<li><code>nonlinearity</code>(str, optional): 一个非线性函数，即一个nn.functional的名称，推荐使用relu或者leaky_relu，默认值为leaky_relu。</li>
+</ul>
+<h4 id="Returns-9"><a href="#Returns-9" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-9"><a href="#Examples-9" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.kaiming_uniform_(w, mode=<span class="hljs-string">&#x27;fan_in&#x27;</span>, nonlinearity=<span class="hljs-string">&#x27;relu&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-kaiming-normal-tensor-a-0-mode-’fan-in’-nonlinearity-’leaky-relu’-generator-None"><a href="#torch-nn-init-kaiming-normal-tensor-a-0-mode-’fan-in’-nonlinearity-’leaky-relu’-generator-None" class="headerlink" title="torch.nn.init.kaiming_normal_(tensor, a&#x3D;0, mode&#x3D;’fan_in’, nonlinearity&#x3D;’leaky_relu’, generator&#x3D;None)"></a>torch.nn.init.kaiming_normal_(tensor, a&#x3D;0, mode&#x3D;’fan_in’, nonlinearity&#x3D;’leaky_relu’, generator&#x3D;None)</h2><p>使用Kaiming正态分布填充输入张量。<br>结果张量中的值采样自 $N(0,\text{std}^2)$，其中:$$\mathrm{std}&#x3D;\frac{\mathrm{gain}}{\sqrt{\mathrm{fan_mode}}}$$<br>也称为He初始化。</p>
+<h4 id="Parameters-10"><a href="#Parameters-10" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>a</code>(float, optional):用于计算负斜率的Leaky ReLU参数,（仅与’leaky_relu’一起使用）</li>
+<li><code>mode</code>(str, optional): 可以为fan_in或fan_out。若为fan_in则保留前向传播时权值方差的量级，若为fan_out则保留反向传播时的量级，默认值为fan_in。</li>
+<li><code>nonlinearity</code>(str, optional): 一个非线性函数，即一个nn.functional的名称，推荐使用relu或者leaky_relu，默认值为leaky_relu。</li>
+</ul>
+<h4 id="Returns-10"><a href="#Returns-10" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-10"><a href="#Examples-10" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.kaiming_normal_(w, mode=<span class="hljs-string">&#x27;fan_out&#x27;</span>, nonlinearity=<span class="hljs-string">&#x27;relu&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-trunc-normal-tensor-mean-0-0-std-1-0-a-2-0-b-2-0-generator-None"><a href="#torch-nn-init-trunc-normal-tensor-mean-0-0-std-1-0-a-2-0-b-2-0-generator-None" class="headerlink" title="torch.nn.init.trunc_normal_(tensor, mean&#x3D;0.0, std&#x3D;1.0, a&#x3D;-2.0, b&#x3D;2.0, generator&#x3D;None)"></a>torch.nn.init.trunc_normal_(tensor, mean&#x3D;0.0, std&#x3D;1.0, a&#x3D;-2.0, b&#x3D;2.0, generator&#x3D;None)</h2><p>使用从截断正态分布中提取的值填充输入张量。<br>该函数用截断正态分布中的值填充输入张量。这些值实际上是从正态分布 $N(\text{mean}, \text{std}^2)$ 中得出的，其中[a, b] 之外的值被重新绘制，直到它们在边界内。用于生成随机值的方法在 ${a ≤ mean ≤ b}$  情况下效果最佳。</p>
+<h4 id="Parameters-11"><a href="#Parameters-11" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>mean</code>(float, optional): 正态分布的平均值</li>
+<li><code>std</code>(float, optional): 正态分布的标准差</li>
+<li><code>a</code>(float, optional): 最小截止值</li>
+<li><code>b</code>(float, optional): 最大截止值</li>
+</ul>
+<h4 id="Returns-11"><a href="#Returns-11" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-11"><a href="#Examples-11" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.trunc_normal_(w)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-orthogonal-tensor-gain-1-generator-None"><a href="#torch-nn-init-orthogonal-tensor-gain-1-generator-None" class="headerlink" title="torch.nn.init.orthogonal_(tensor, gain&#x3D;1, generator&#x3D;None)"></a>torch.nn.init.orthogonal_(tensor, gain&#x3D;1, generator&#x3D;None)</h2><p>用（半）正交矩阵填充输入张量。<br>输入张量必须至少有2个维度，对于超过2个维度的张量，尾部维度将被展平。</p>
+<h4 id="Parameters-12"><a href="#Parameters-12" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor, 其中 n&gt;&#x3D;2</li>
+<li><code>gain</code>(float, optional): 用于缩放的因子</li>
+</ul>
+<h4 id="Returns-12"><a href="#Returns-12" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-12"><a href="#Examples-12" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.orthogonal_(w)<br></code></pre></td></tr></table></figure>
+
+<h2 id="torch-nn-init-sparse-tensor-sparsity-std-0-01-generator-None"><a href="#torch-nn-init-sparse-tensor-sparsity-std-0-01-generator-None" class="headerlink" title="torch.nn.init.sparse_(tensor, sparsity, std&#x3D;0.01, generator&#x3D;None)"></a>torch.nn.init.sparse_(tensor, sparsity, std&#x3D;0.01, generator&#x3D;None)</h2><p>将2D输入张量填充为稀疏矩阵。<br>非零元素将从正态分布中提取 $N(0,0.01)$</p>
+<h4 id="Parameters-13"><a href="#Parameters-13" class="headerlink" title="Parameters:"></a>Parameters:</h4><ul>
+<li><code>tensor</code>(Tensor):一个 N 维张量torch.Tensor</li>
+<li><code>sparsity</code>(float): 每列中元素被设置为零的比例</li>
+<li><code>std</code>(float, optional): 用于生成非零值的正态分布的标准差</li>
+</ul>
+<h4 id="Returns-13"><a href="#Returns-13" class="headerlink" title="Returns:"></a>Returns:</h4><ul>
+<li><code>Tensor</code> :返回一个张量，同时参数也会自动更新</li>
+</ul>
+<h4 id="Examples-13"><a href="#Examples-13" class="headerlink" title="Examples:"></a>Examples:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">w = torch.empty(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>)<br>nn.init.sparse_(w, sparsity=<span class="hljs-number">0.1</span>)<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>nn.init</div>
+      <div>http://jiqingjiang.github.io/p/edda2ce1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jiqing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/p/828b3633/" title="训练集、验证集和测试集的区别">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">训练集、验证集和测试集的区别</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/p/dd118e70/" title="BiasedMHA">
+                        <span class="hidden-mobile">BiasedMHA</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

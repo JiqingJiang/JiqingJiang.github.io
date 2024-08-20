@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jiqing">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="dgl.sampling是dgl库中的一个子模块，包含用于通过随机游走、邻居采样等从图中采样的运算符和实用程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dgl.sampling">
+<meta property="og:url" content="http://jiqingjiang.github.io/p/f47e88c3/index.html">
+<meta property="og:site_name" content="erode">
+<meta property="og:description" content="dgl.sampling是dgl库中的一个子模块，包含用于通过随机游走、邻居采样等从图中采样的运算符和实用程序。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-19T09:06:33.000Z">
+<meta property="article:modified_time" content="2024-08-19T23:38:31.333Z">
+<meta property="article:author" content="Jiqing">
+<meta property="article:tag" content="dgl">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>dgl.sampling - erode</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jiqingjiang.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>erode</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/gallery/" target="_self">
+                <i class="iconfont icon-books"></i>
+                <span>gallery</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/picture1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="dgl.sampling"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-19 17:06" pubdate>
+          2024年7月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">dgl.sampling</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="dgl-sampling"><a href="#dgl-sampling" class="headerlink" title="dgl.sampling"></a>dgl.sampling</h1><p>dgl.sampling 包含用于通过随机游走、邻居采样等从图中采样的运算符和实用程序。它们通常与 dgl.dataloading 包中的 DataLoader 一起使用。</p>
+<h2 id="Random-walk-随机游走"><a href="#Random-walk-随机游走" class="headerlink" title="Random walk 随机游走"></a>Random walk 随机游走</h2><h3 id="random-walk"><a href="#random-walk" class="headerlink" title="random_walk"></a><a target="_blank" rel="noopener" href="https://docs.dgl.ai/generated/dgl.sampling.random_walk.html">random_walk</a></h3><p>根据给定的元路径，从起始节点数组生成随机行走轨迹。<br>每个开始节点都将生成一个轨迹，该轨迹<br>    1. 从给定节点开始，将 t 设置为0。<br>    2. 从当前节点沿着边类型 metapath[t] 拾取和遍历。<br>    3. 如果找不到边，则停止。否则，递增 t 并转到步骤2。<br>要为单个节点生成多个轨迹，可以多次指定同一节点。<br>返回的跟踪都具有长度 len(metapath) + 1 ，其中第一个节点是起始节点本身。<br>如果随机游走提前停止，DGL会用-1填充轨迹，使其具有相同的长度。<br>此函数支持GPU上的图形和UVA采样。   </p>
+<p>Usage:<code>dgl.sampling.random_walk(g, nodes, *, metapath=None, length=None, prob=None, restart_prob=None, return_eids=False)</code></p>
+<p>Parameters: </p>
+<ul>
+<li><code>g</code> (DGLGraph) – 输入图。</li>
+<li><code>nodes</code> (tensor) – 起始节点。随机游走轨迹开始的节点ID张量。张量必须与图的ID类型具有相同的dtype。张量必须与图形位于同一设备上，或者在图形固定时位于GPU上（UVA采样）。</li>
+<li><code>metapath</code> (list[str or tuple of str], optional) – 元路径。元路径，指定为边类型的列表。与 length 互斥。如果省略，DGL假设 g 只有一个节点和边类型。在这种情况下，参数 length 指定随机游走轨迹的长度。</li>
+<li><code>length</code> (int, optional) 随机游走的长度。与 metapath 互斥。 仅在 metapath 为“None”时使用。</li>
+<li><code>prob</code> (str, optional) 图上的边特征张量的名称，存储与每条边相关联的（未归一化的）概率，用于选择下一个节点。特征张量必须是非负的，并且所有节点的出站边缘的概率之和必须为正（尽管它们的总和不必为1）。否则结果将是未定义的。特征张量必须与图形位于同一设备上。如果忽略，DGL假定均匀拾取相邻对象。</li>
+<li><code>restart_prob</code> (float or Tensor, optional) 在每次转换之前终止当前跟踪的概率。如果给定了张量，则 restart_prob 应该与图形位于同一设备上，或者在图形固定（UVA采样）时位于GPU上，并且与 metapath 或 length 具有相同的长度。</li>
+<li><code>return_eids</code> (bool, optional) 如果为True，则另外返回遍历的边ID。Default: False.</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>traces</code>（Tensor）-二维节点ID张量，形状为 (num_seeds, len(metapath) + 1) 或 (num_seeds, length + 1) （如果 metapath 为None）。</li>
+<li><code>eids</code>（Tensor，可选）-二维边ID张量，形状为 (num_seeds, len(metapath)) 或 (num_seeds, length) （如果 metapath 为None）。只有在 return_eids 为True时才返回。</li>
+<li><code>types</code>（Tensor）-一维节点类型ID张量，形状为 (len(metapath) + 1) 或 (length + 1) 。类型ID与原始图 g 中的类型ID匹配。</li>
+</ul>
+<p>Examples:<br>下面的代码创建了一个同构图：&gt; g1 &#x3D; dgl.graph（（[0，1，1，2，3]，[1，2，3，0，0]））<br>Normal random walk: 正态随机游走：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.random_walk(g1, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], length=<span class="hljs-number">4</span>)<br>(tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>],<br>         [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]), tensor([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+<p>或返回边缘ID：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.random_walk(g1, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], length=<span class="hljs-number">4</span>, return_eids=<span class="hljs-literal">True</span>)<br>(tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>],<br>         [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]),<br> tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>],<br>         [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">0</span>]]),<br> tensor([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+<p>第一张量指示每个种子节点的随机行走路径。第二个张量中的第j个元素表示每条路径中第j个节点的节点类型ID。在本例中，它返回全0。   </p>
+<p>重新开始的随机游走：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.random_walk_with_restart(g1, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], length=<span class="hljs-number">4</span>, restart_prob=<span class="hljs-number">0.5</span>)<br>(tensor([[ <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>],<br>         [ <span class="hljs-number">1</span>,  <span class="hljs-number">3</span>,  <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>],<br>         [ <span class="hljs-number">2</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>],<br>         [ <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>]]), tensor([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+
+<p>非均匀随机游走：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>g1.edata[<span class="hljs-string">&#x27;p&#x27;</span>] = torch.FloatTensor([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>])     <span class="hljs-comment"># disallow going from 1 to 2</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.random_walk(g1, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], length=<span class="hljs-number">4</span>, prob=<span class="hljs-string">&#x27;p&#x27;</span>)<br>(tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>],<br>         [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]), tensor([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+
+<p>基于元路径的随机游走：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>g2 = dgl.heterograph(&#123;<br> ... (<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-string">&#x27;follow&#x27;</span>, <span class="hljs-string">&#x27;user&#x27;</span>): ([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]),<br> ... (<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-string">&#x27;view&#x27;</span>, <span class="hljs-string">&#x27;item&#x27;</span>): ([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]),<br> ... (<span class="hljs-string">&#x27;item&#x27;</span>, <span class="hljs-string">&#x27;viewed-by&#x27;</span>, <span class="hljs-string">&#x27;user&#x27;</span>): ([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>])<br><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.random_walk(<br> ... g2, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], metapath=[<span class="hljs-string">&#x27;follow&#x27;</span>, <span class="hljs-string">&#x27;view&#x27;</span>, <span class="hljs-string">&#x27;viewed-by&#x27;</span>] * <span class="hljs-number">2</span>)<br>(tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],<br>         [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>],<br>         [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>]]), tensor([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+
+<p>基于元路径的随机游走，仅在项目上重新启动（即在遍历“视图”关系后）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">dgl.sampling.random_walk(<br>    g2, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], metapath=[<span class="hljs-string">&#x27;follow&#x27;</span>, <span class="hljs-string">&#x27;view&#x27;</span>, <span class="hljs-string">&#x27;viewed-by&#x27;</span>] * <span class="hljs-number">2</span>,<br>    restart_prob=torch.FloatTensor([<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]))<br>(tensor([[ <span class="hljs-number">0</span>,  <span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>],<br>         [ <span class="hljs-number">1</span>,  <span class="hljs-number">3</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">0</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">0</span>],<br>         [ <span class="hljs-number">2</span>,  <span class="hljs-number">0</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">3</span>,  <span class="hljs-number">2</span>,  <span class="hljs-number">2</span>],<br>         [ <span class="hljs-number">0</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">1</span>,  <span class="hljs-number">3</span>,  <span class="hljs-number">0</span>,  <span class="hljs-number">0</span>,  <span class="hljs-number">0</span>]]), tensor([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]))<br></code></pre></td></tr></table></figure>
+<h3 id="node2vec-random-walk"><a href="#node2vec-random-walk" class="headerlink" title="node2vec_random_walk"></a><a target="_blank" rel="noopener" href="https://docs.dgl.ai/generated/dgl.sampling.node2vec_random_walk.html">node2vec_random_walk</a></h3><p>基于node 2 vec模型，从起始节点数组生成随机游走轨迹。<br>返回的轨迹都具有长度 walk_length + 1 ，其中第一个节点是起始节点本身。<br>请注意，如果随机游走提前停止，DGL会用-1填充迹线，使其具有相同的长度。   </p>
+<p>Usage:<code>dgl.sampling.node2vec_random_walk(g, nodes, p, q, walk_length, prob=None, return_eids=False)</code></p>
+<p>Parameters:</p>
+<ul>
+<li>g (DGLGraph)  该图必须在CPU上。注意，node 2 vec只支持同构图。</li>
+<li>nodes (Tensor) 随机游走轨迹开始的节点ID张量。张量必须在CPU上，并且必须具有与图的ID类型相同的dtype。</li>
+<li>p (float) 在遍历中立即重新访问节点的可能性。</li>
+<li>q (float) 在广度优先策略和深度优先策略之间进行插值的控制参数。</li>
+<li>walk_length (int) 随机游走的长度。</li>
+<li>prob (str, optional) 图上的边特征张量的名称，存储与每条边相关联的（未归一化的）概率，用于选择下一个节点。特征张量必须是非负的，并且所有节点的出站边缘的概率之和必须为正（尽管它们的总和不必为1）。否则结果将是未定义的。如果忽略，DGL假定均匀拾取相邻对象。</li>
+<li>return_eids (bool, optional) 如果为True，则另外返回遍历的边ID。Default: False.</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>traces (Tensor) 形状为 (num_seeds, walk_length + 1) 的二维节点ID张量。</li>
+<li>eids (Tensor, optional) 一个二维边ID张量，形状为 (num_seeds, length) 。只有在 return_eids 为True时才返回。</li>
+</ul>
+<p>Examples:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>g1 = dgl.graph(([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]))<br><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.node2vec_random_walk(g1, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, walk_length=<span class="hljs-number">4</span>)<br>tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>        [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>],<br>        [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>],<br>        [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]])<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>dgl.sampling.node2vec_random_walk(g1, [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>], <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, walk_length=<span class="hljs-number">4</span>, return_eids=<span class="hljs-literal">True</span>)<br>(tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>],<br>         [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]),<br> tensor([[<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">0</span>],<br>         [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],<br>         [<span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>],<br>         [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>]]))<br></code></pre></td></tr></table></figure>
+<h3 id="pack-traces"><a href="#pack-traces" class="headerlink" title="pack_traces"></a><a target="_blank" rel="noopener" href="https://docs.dgl.ai/generated/dgl.sampling.pack_traces.html">pack_traces</a></h3><h2 id="Neighbor-sampling-邻域抽样法"><a href="#Neighbor-sampling-邻域抽样法" class="headerlink" title="Neighbor sampling 邻域抽样法"></a>Neighbor sampling 邻域抽样法</h2><h2 id="Negative-sampling-负采样"><a href="#Negative-sampling-负采样" class="headerlink" title="Negative sampling 负采样"></a>Negative sampling 负采样</h2>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/dgl/" class="print-no-link">#dgl</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>dgl.sampling</div>
+      <div>http://jiqingjiang.github.io/p/f47e88c3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jiqing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年7月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/p/93b65aed/" title="分类问题评价指标">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分类问题评价指标</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/p/70a6638/" title="dgl.function">
+                        <span class="hidden-mobile">dgl.function</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

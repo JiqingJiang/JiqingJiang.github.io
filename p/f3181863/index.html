@@ -1,0 +1,664 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.jpg">
+  <link rel="icon" href="/img/fluid.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jiqing">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="class dgl.nn.pytorch.gt.PathEncoder(max_len, feat_dim, num_heads&#x3D;1)Do Transformers Really Perform Bad for Graph Representation中介绍的路径编码器（Path Encoder）该模块是一个可学习的路径嵌入模块，并将每对节点之间的最短路径编码为注意力偏置。 Parameters">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PathEncoder">
+<meta property="og:url" content="http://jiqingjiang.github.io/p/f3181863/index.html">
+<meta property="og:site_name" content="erode">
+<meta property="og:description" content="class dgl.nn.pytorch.gt.PathEncoder(max_len, feat_dim, num_heads&#x3D;1)Do Transformers Really Perform Bad for Graph Representation中介绍的路径编码器（Path Encoder）该模块是一个可学习的路径嵌入模块，并将每对节点之间的最短路径编码为注意力偏置。 Parameters">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-02T14:14:13.000Z">
+<meta property="article:modified_time" content="2024-08-19T23:38:42.089Z">
+<meta property="article:author" content="Jiqing">
+<meta property="article:tag" content="dgl">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>PathEncoder - erode</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jiqingjiang.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>erode</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/gallery/" target="_self">
+                <i class="iconfont icon-books"></i>
+                <span>gallery</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/picture1.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="PathEncoder"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-02 22:14" pubdate>
+          2024年8月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          789 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">PathEncoder</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="class-dgl-nn-pytorch-gt-PathEncoder-max-len-feat-dim-num-heads-1"><a href="#class-dgl-nn-pytorch-gt-PathEncoder-max-len-feat-dim-num-heads-1" class="headerlink" title="class dgl.nn.pytorch.gt.PathEncoder(max_len, feat_dim, num_heads=1)"></a><code>class dgl.nn.pytorch.gt.PathEncoder(max_len, feat_dim, num_heads=1)</code></h2><p><a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper/2021/file/f1c1592588411002af340cbaedd6fc33-Paper.pdf">Do Transformers Really Perform Bad for Graph Representation</a>中介绍的路径编码器（Path Encoder）<br>该模块是一个可学习的路径嵌入模块，并将每对节点之间的最短路径编码为注意力偏置。</p>
+<h3 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters</h3><ul>
+<li>max_len(int) 每个路径中要编码的最大边数。每条路径的超出部分将被截断，即截断序列号不小于max_len的边。</li>
+<li>feat_dim(int) - 输入图中边特征的维数。</li>
+<li>num_heads(int, optional) 如果应用多头注意机制，则注意头的数量。预设值：1。</li>
+</ul>
+<h3 id="forward-dist，path-data"><a href="#forward-dist，path-data" class="headerlink" title="forward(dist，path_data)"></a><code>forward(dist，path_data)</code></h3><p>Parameters<br>    - dist(Tensor) - 具有零填充的批处理图的最短路径距离矩阵，形状为<code>(B, N, N)</code> ，其中<code>B</code>是批处理图，<code>N</code>是节点的最大数量。<br>    - path_data(Tensor) - 沿最短路径（零填充）的边特征，形状为<code>(B,N,N,L,d)</code>，其中<code>L</code>是最短路径的最大值，<code>d</code>是边特征的维数。<br>Returns<br>    返回注意偏置作为路径编码，形状为<code>(B,N,N,H)</code> ，其中<code>B</code>是输入图的批次，<code>N</code>是节点的最大数量，以及<code>H</code>是num_heads。</p>
+<p>Return type<br>    torch.Tensor</p>
+<h2 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PathEncoder</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, max_len, feat_dim, num_heads=<span class="hljs-number">1</span></span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        <span class="hljs-variable language_">self</span>.max_len = max_len<br>        <span class="hljs-variable language_">self</span>.feat_dim = feat_dim<br>        <span class="hljs-variable language_">self</span>.num_heads = num_heads<br>        <span class="hljs-variable language_">self</span>.embedding_table = nn.Embedding(max_len * num_heads, feat_dim)<br>    <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, dist, path_data</span>):<br>        shortest_distance = th.clamp(dist, <span class="hljs-built_in">min</span>=<span class="hljs-number">1</span>, <span class="hljs-built_in">max</span>=<span class="hljs-variable language_">self</span>.max_len)<br>        edge_embedding = <span class="hljs-variable language_">self</span>.embedding_table.weight.reshape(<br>            <span class="hljs-variable language_">self</span>.max_len, <span class="hljs-variable language_">self</span>.num_heads, -<span class="hljs-number">1</span><br>        )<br>        path_encoding = th.div(<br>            th.einsum(<span class="hljs-string">&quot;bxyld,lhd-&gt;bxyh&quot;</span>, path_data, edge_embedding).permute(<br>                <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span><br>            ),<br>            shortest_distance,<br>        ).permute(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">return</span> path_encoding<br></code></pre></td></tr></table></figure>
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>Example1:   </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch <span class="hljs-keyword">as</span> th<br><span class="hljs-keyword">import</span> dgl<br><span class="hljs-keyword">from</span> dgl.nn <span class="hljs-keyword">import</span> PathEncoder<br><span class="hljs-keyword">from</span> dgl <span class="hljs-keyword">import</span> shortest_dist<br><br>g = dgl.graph(([<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>], [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">3</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>]))<br>edata = th.rand(<span class="hljs-number">8</span>, <span class="hljs-number">16</span>)<br><span class="hljs-comment"># Since shortest_dist returns -1 for unreachable node pairs,</span><br><span class="hljs-comment"># edata[-1] should be filled with zero padding.</span><br>edata = th.cat((edata, th.zeros(<span class="hljs-number">1</span>, <span class="hljs-number">16</span>)), dim=<span class="hljs-number">0</span>)<br>dist, path = shortest_dist(g, root=<span class="hljs-literal">None</span>, return_paths=<span class="hljs-literal">True</span>)<br>path_data = edata[path[:, :, :<span class="hljs-number">2</span>]]<br>path_encoder = PathEncoder(<span class="hljs-number">2</span>, <span class="hljs-number">16</span>, num_heads=<span class="hljs-number">8</span>)<br>out = path_encoder(dist.unsqueeze(<span class="hljs-number">0</span>), path_data.unsqueeze(<span class="hljs-number">0</span>))<br><span class="hljs-built_in">print</span>(out.shape)<br></code></pre></td></tr></table></figure>
+
+<h2 id="shortest-dist"><a href="#shortest-dist" class="headerlink" title="shortest_dist"></a>shortest_dist</h2><p><code>dgl.shortest_dist(g, root=None, return_paths=False, dist=None, method=&#39;dijkstra&#39;)</code><br>计算图中每对节点之间的最短路径距离。如果<code>root</code>为<code>None</code>，则返回所有节点对之间的最短路径距离。如果<code>root</code>不为<code>None</code>，则返回从<code>root</code>到所有其他节点的最短路径距离。</p>
+<h3 id="Parameters-1"><a href="#Parameters-1" class="headerlink" title="Parameters"></a>Parameters</h3><ul>
+<li>g(DGLGraph) - 输入图。</li>
+<li>root(int, optional) - 根节点。如果为<code>None</code>，则返回所有节点对之间的最短路径距离。预设值：<code>None</code>。</li>
+<li>return_paths(bool, optional) - 如果为<code>True</code>，则返回每对节点之间的最短路径。预设值：<code>False</code>。</li>
+</ul>
+<h3 id="Returns"><a href="#Returns" class="headerlink" title="Returns"></a>Returns</h3><ul>
+<li>dist(Tensor) - 如果<code>root</code>是节点ID，返回最短距离，形状是<code>(N,)</code>。如果<code>root</code>是None,则返回最短路径距离矩阵，形状为<code>(N, N)</code>，其中<code>N</code>是节点的最大数量。</li>
+<li>path(Tensor) - 如果<code>root</code>是节点ID，返回最短路径，形状是<code>(N,L)</code>。如果<code>root</code>是None，返回最短路径矩阵，形状为<code>(N, N, L)</code>，其中<code>L</code>是最短路径的最大值。</li>
+</ul>
+<h3 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h3><p>可以看dgl官网给出的这个例子，这里有四个顶点0，1，2，3，然后有四条边，eid:0 -&gt;(0,2), eid:1 -&gt;(1,0), eid:2 -&gt;(1,3), eid:3 -&gt;(2,3)<br>返回的paths矩阵的内容就对应着这里的eid</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs python">g = dgl.graph(([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>]))<br>dgl.shortest_dist(g, root=<span class="hljs-number">0</span>)<br>dist, paths = dgl.shortest_dist(g, root=<span class="hljs-literal">None</span>, return_paths=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(dist)<br><span class="hljs-comment"># tensor([[ 0, -1,  1,  2],</span><br><span class="hljs-comment">#         [ 1,  0,  2,  1],</span><br><span class="hljs-comment">#         [-1, -1,  0,  1],</span><br><span class="hljs-comment">#         [-1, -1, -1,  0]])</span><br><span class="hljs-built_in">print</span>(paths)<br><span class="hljs-comment"># tensor([[[-1, -1],</span><br><span class="hljs-comment">#          [-1, -1],</span><br><span class="hljs-comment">#          [ 0, -1],</span><br><span class="hljs-comment">#          [ 0,  3]],</span><br><br><span class="hljs-comment">#         [[ 1, -1],</span><br><span class="hljs-comment">#          [-1, -1],</span><br><span class="hljs-comment">#          [ 1,  0],</span><br><span class="hljs-comment">#          [ 2, -1]],</span><br><br><span class="hljs-comment">#         [[-1, -1],</span><br><span class="hljs-comment">#          [-1, -1],</span><br><span class="hljs-comment">#          [-1, -1],</span><br><span class="hljs-comment">#          [ 3, -1]],</span><br><br><span class="hljs-comment">#         [[-1, -1],</span><br><span class="hljs-comment">#          [-1, -1],</span><br><span class="hljs-comment">#          [-1, -1],</span><br><span class="hljs-comment">#          [-1, -1]]])</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/dgl/" class="print-no-link">#dgl</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>PathEncoder</div>
+      <div>http://jiqingjiang.github.io/p/f3181863/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jiqing</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/p/b75828bf/" title="DegreeEncoder">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DegreeEncoder</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/p/5cc2d788/" title="SpatialEncoder">
+                        <span class="hidden-mobile">SpatialEncoder</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
