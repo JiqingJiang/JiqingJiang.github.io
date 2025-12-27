@@ -106,3 +106,9 @@ Embedding 的本质是将离散符号（如词、句子、用户、图像等）�
 评估可分为两类：**任务无关评估**和**任务相关评估**。前者在 MTEB、STS-B、BEIR 等标准数据集上进行，用于衡量模型的通用语义能力；后者则在你自己的业务数据上构建评估集（如问答对、点击日志或人工标注相关文档），以 Recall@K、MRR 等核心指标验证真实效果。
 
 需要特别注意：**通用能力强 ≠ 业务效果好**。推荐做法是：先通过 MTEB / C-MTEB 快速筛选候选模型，再用自有数据做最终验证和选型。同时，还需综合考虑向量维度（如是否支持套娃嵌入降维）、推理延迟和存储成本，确保模型在效果与效率之间取得最佳平衡。
+
+## reference
+banner图使用通义万象生成，内容写作使用了Gemini和Qwen-max辅助整理归纳  
+[mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard)    
+[MMTEB: Massive Multilingual Text Embedding Benchmark](https://arxiv.org/pdf/2502.13595)
+[认识MTEB榜单](https://meetcoding.cn/lm/mteb.html)
