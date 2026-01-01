@@ -116,6 +116,7 @@ Step 3: Executing git commands...
 ```
 
 效果演示： 
-现在，你只需在终端输入：
-```
-"刚写完关于 Agent 的文章，帮我提交一下"，Agent 就会自动根据你定义的规则，完成剩下的所有 Git 操作。
+现在，你只需在终端输入 "我刚写完关于 Agent 的文章，帮我提交一下"，Agent 就会自动根据你定义的规则，完成剩下的所有 Git 操作。
+![](./img/agent-commit1.png)
+
+![](./img/agent-commit2.png)
