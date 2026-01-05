@@ -3,7 +3,7 @@ title: embedding模型相关知识
 published: 2025-12-27
 description: "现在的大模型，RAG等都需要把输入进行embedding，那embedding模型选型的标准是什么呢？以及embedding的原理，一般embedding是怎么实现的，以及如何评估embedding的效果好不好？"
 image: "./img/embedding.png"
-tags: ["LLM", "RAG"]
+tags: ["LLM基础", "RAG"]
 category: LLM
 draft: false
 ---
