@@ -2,8 +2,8 @@
 title: 图神经网络之GAT
 published: 2024-03-29
 description: 'GAT学习笔记'
-tags: ["GNN"]
-category: papers
+tags: ["GNN", "深度学习"]
+category: GNN
 draft: false
 ---
 # 图神经网络之GAT

@@ -1,8 +1,6 @@
 ---
 title: 设置SSH秘钥免密码登录服务器
-published: 2023-11-22 
-tags: []
-category: tools
+published: 2023-11-22
 draft: false
 ---
 当你需要设置SSH密钥以进行远程访问时，以下是从生成SSH密钥对到将公钥添加到远程服务器的完整步骤，以及每一步的解释：

@@ -2,8 +2,8 @@
 title: 图神经网络之GCN
 published: 2024-03-29
 description: 'GCN学习笔记'
-tags: ["GNN"]
-category: papers
+tags: ["GNN", "深度学习"]
+category: GNN
 draft: false
 ---
 

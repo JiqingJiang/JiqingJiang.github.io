@@ -1,8 +1,6 @@
 ---
 title: 在Ubuntu上使用nginx部署静态网页
 published: 2024-03-03
-category: tools
-tags: []
 draft: false
 ---
 

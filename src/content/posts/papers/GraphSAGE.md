@@ -2,8 +2,8 @@
 title: 图神经网络之GraphSAGE
 published: 2024-03-31
 description: 'GraphSAGE学习笔记'
-tags: ["GNN"]
-category: papers
+tags: ["GNN", "深度学习"]
+category: GNN
 draft: false
 ---
 

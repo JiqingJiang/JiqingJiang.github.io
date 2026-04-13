@@ -2,7 +2,7 @@
 title: "Agent Skills 实践"
 description: "实战案例：构建博客自动提交助手"
 published: 2026-01-01
-category: tools
+category: AI
 tags: ["skills"]
 ---
 

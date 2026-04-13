@@ -1,8 +1,6 @@
 ---
 title: 如何修改macos命令行终端的默认提示符
 published: 2023-12-10
-category: tools
-tags: []
 draft: false
 ---
 ## 命令行终端的提示符是什么玩意？

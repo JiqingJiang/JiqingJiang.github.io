@@ -2,7 +2,7 @@
 title: "Agent Skills 深度解析"
 description: "深入剖析 Anthropic 开源的 Agent Skills 标准。为什么我们需要 Skill？它是如何解决上下文污染问题的？以及如何利用它构建可复利的 AI 技能库。"
 published: 2026-01-01
-category: tools
+category: AI
 tags: ["skills"]
 ---
 
