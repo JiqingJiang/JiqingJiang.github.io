@@ -5,7 +5,7 @@ updated: 2026-08-02
 tags: ["Agent", "LLM", "OpenAI", "API 设计"]
 category: Agent
 description: "从无状态推理、上下文重复传输、Prompt Cache 和 Agent Loop 出发，理解 Chat Completions 为什么曾经合理，又为什么不足以承载今天的 Agent。"
-draft: true
+draft: false
 ---
 最近在了解 Chat Completions API 协议时，我一直有一个疑问：
 
