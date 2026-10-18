@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import Markdown from "@components/misc/Markdown.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+export async function getStaticPaths() {
+	const entries = await getCollection("projects");
+	return entries.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<MainGridLayout title={entry.data.title} description={entry.data.oneLiner || entry.data.title}>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
+		<div class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full">
+			<div class="onload-animation mb-3 flex items-center gap-2 flex-wrap">
+				<span class="text-xs rounded-md px-2 py-0.5 bg-[var(--primary)]/10 text-[var(--primary)] font-bold">{entry.data.status}</span>
+				{entry.data.tags.map((t) => (
+					<span class="text-xs rounded-md px-2 py-0.5 bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50">{t}</span>
+				))}
+			</div>
+			<div class="relative onload-animation mb-5">
+				<div class="transition w-full block font-bold mb-3 text-3xl md:text-[2.25rem]/[2.75rem] text-black/90 dark:text-white/90
+					md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+					before:absolute before:top-[0.75rem] before:left-[-1.125rem]">
+					{entry.data.title}
+				</div>
+				{entry.data.oneLiner && (
+					<div class="text-black/55 dark:text-white/55 mb-2">{entry.data.oneLiner}</div>
+				)}
+				<div class="flex items-center gap-4 text-sm text-black/40 dark:text-white/40">
+					{entry.data.role && <span>角色：{entry.data.role}</span>}
+					{entry.data.period && <span>时间：{entry.data.period}</span>}
+				</div>
+				{entry.data.highlights.length > 0 && (
+					<ul class="mt-3 text-sm text-black/60 dark:text-white/60 list-disc list-inside">
+						{entry.data.highlights.map((h) => <li>{h}</li>)}
+					</ul>
+				)}
+				{entry.data.links.length > 0 && (
+					<div class="flex flex-wrap gap-2 mt-4">
+						{entry.data.links.map((l) => (
+							<a href={l.url} class="rounded-lg px-3 py-1 text-sm bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] text-[var(--btn-content)] transition">
+								{l.name} →
+							</a>
+						))}
+					</div>
+				)}
+			</div>
+			<Markdown class="mb-6 markdown-content onload-animation">
+				<Content />
+			</Markdown>
+			<div class="flex justify-between items-center border-t-[1px] border-dashed border-[var(--line-divider)] pt-4 pb-2">
+				<a href="/portfolio/" class="btn-card rounded-2xl px-4 py-2 font-bold active:scale-95">← 返回作品集</a>
+			</div>
+		</div>
+	</div>
+</MainGridLayout>

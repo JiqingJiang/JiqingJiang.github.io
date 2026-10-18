@@ -43,6 +43,15 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
+		// 本地开发时取消注释（方法论模块暂不上传）
+		// {
+		// 	name: "方法论",
+		// 	url: "/methodology/", // Internal links should not include the base path, as it is automatically added
+		// },
+		{
+			name: "作品集",
+			url: "/portfolio/", // Internal links should not include the base path, as it is automatically added
+		},
 		LinkPreset.About,
 		{
 			name: "GitHub",
