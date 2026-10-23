@@ -1,7 +1,7 @@
 ---
 title: "raw_agent 能力边界探索"
 published: 2026-05-14
-tags: ["Agent", "LLM", "评测", "安全"]
+tags: ["Agent", "评测", "Security"]
 category: Agent
 description: "用 13 个测试场景系统性地压测手写的 raw_agent，发现了安全隐患、效率问题和意外的能力亮点。"
 draft: false

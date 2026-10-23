@@ -2,7 +2,7 @@
 title: "当 Agent 拿到 Shell：从路径围栏到纵深防御"
 published: 2026-07-28
 updated: 2026-07-29
-tags: ["Agent", "Security", "HITL", "系统设计"]
+tags: ["Agent", "Security", "HITL"]
 category: Agent
 description: "从攻防博弈的角度讨论 Agent 的路径越界、危险命令、间接提示注入、恶意仓库、MCP、网络外传和资源耗尽风险，以及如何用默认拒绝、能力隔离和统一事实构建纵深防御。"
 draft: false

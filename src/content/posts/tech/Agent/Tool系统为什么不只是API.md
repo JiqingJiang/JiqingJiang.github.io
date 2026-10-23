@@ -2,7 +2,7 @@
 title: "抛开代码理解 Agent 的 Tool 系统"
 published: 2026-07-21
 updated: 2026-07-21
-tags: ["Agent", "Tool", "系统设计"]
+tags: ["Agent", "Tool"]
 category: Agent
 description: "抛开具体框架，从业务任务、能力抽象、执行治理、异常处理和评测五个层面，建立对 Agent Tool 系统的完整认知。"
 draft: false

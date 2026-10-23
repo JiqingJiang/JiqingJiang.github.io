@@ -1,7 +1,7 @@
 ---
 title: "OpenAI vs Anthropic SDK 深度对比"
 published: 2026-05-13
-tags: ["Agent", "LLM", "SDK"]
+tags: ["Agent", "SDK"]
 category: Agent
 description: "同一个模型（DeepSeek V4 Flash）、同一个问题、两种 API 格式的完整对比，从设计哲学到工程实践。"
 draft: false

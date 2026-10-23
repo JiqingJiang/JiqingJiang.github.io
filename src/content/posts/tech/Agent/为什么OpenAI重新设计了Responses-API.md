@@ -2,7 +2,7 @@
 title: "从 Chat Completions 到 Responses：OpenAI 为什么要重做一次 API"
 published: 2026-08-02
 updated: 2026-08-02
-tags: ["Agent", "LLM", "OpenAI", "API 设计"]
+tags: ["Agent", "API"]
 category: Agent
 description: "从无状态推理、上下文重复传输、Prompt Cache 和 Agent Loop 出发，理解 Chat Completions 为什么曾经合理，又为什么不足以承载今天的 Agent。"
 draft: false

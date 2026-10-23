@@ -1,7 +1,7 @@
 ---
 title: "Memory 为什么存在 — 从 LLM 的「失忆症」说起"
 published: 2026-05-17
-tags: ["Agent", "Memory", "LLM"]
+tags: ["Agent", "Memory"]
 category: Agent
 description: "LLM 是天然失忆的。一个没有 Memory 的 Agent，连 10 轮对话都活不下去。本文从真实的踩坑经历出发，讲清楚 Memory 系统为什么是 Agent 的基础设施，而不是可选功能。"
 draft: false

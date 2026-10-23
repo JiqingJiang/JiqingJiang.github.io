@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import Markdown from "@components/misc/Markdown.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+export async function getStaticPaths() {
+	const entries = await getCollection("methodology");
+	return entries.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<MainGridLayout title={entry.data.title} description={entry.data.oneLiner || entry.data.title}>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
+		<div class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full">
+			<div class="onload-animation mb-3">
+				<span class="text-xs font-bold text-[var(--primary)]">第 {entry.data.episode} 期</span>
+				{entry.data.categories?.map((c) => (
+					<span class="ml-2 text-xs rounded-md px-2 py-0.5 bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50">{c}</span>
+				))}
+			</div>
+			<div class="relative onload-animation mb-5">
+				<div class="transition w-full block font-bold mb-3 text-3xl md:text-[2.25rem]/[2.75rem] text-black/90 dark:text-white/90
+					md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+					before:absolute before:top-[0.75rem] before:left-[-1.125rem]">
+					{entry.data.title}
+				</div>
+				{entry.data.oneLiner && (
+					<div class="text-black/55 dark:text-white/55">{entry.data.oneLiner}</div>
+				)}
+			</div>
+			<Markdown class="mb-6 markdown-content onload-animation">
+				<Content />
+			</Markdown>
+			<div class="flex justify-between items-center border-t-[1px] border-dashed border-[var(--line-divider)] pt-4 pb-2">
+				<a href="/methodology/" class="btn-card rounded-2xl px-4 py-2 font-bold active:scale-95">← 返回方法论列表</a>
+			</div>
+		</div>
+	</div>
+</MainGridLayout>

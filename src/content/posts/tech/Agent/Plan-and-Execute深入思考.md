@@ -1,7 +1,7 @@
 ---
 title: 'Plan-and-Execute Agent：从"知道"到"理解"'
 published: 2026-05-16
-tags: ["Agent", "Plan-Execute", "DAG"]
+tags: ["Agent", "Plan"]
 category: Agent
 description: '学完 Plan-and-Execute 之后，我能说出大致的思想和实现，但如果再往深挖一层，追问具体的设计理由、实现细节，我就卡壳。这篇文章是我尝试把模糊的理解变成清晰认知的过程——用一个真实任务走完全部代码，把每个"为什么这样做"都讲透。'
 draft: false

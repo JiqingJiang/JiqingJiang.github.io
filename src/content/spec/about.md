@@ -14,7 +14,9 @@
 
 ### 关于我
 
-计算机硕士在读，MBTI 是 INTJ，白羊座——习惯先想清楚「为什么」再动手，追求深度理解而非表面掌握。
+中国石油大学（北京）计算机本硕在读，研究方向为**图神经网络 × EDA**，秋招求职中（目标：央国企技术岗）。完整的能力展示见 [作品集](/portfolio/)。
+
+MBTI 是 INTJ，白羊座——习惯先想清楚「为什么」再动手，追求深度理解而非表面掌握。
 
 我信**复利**。不追求一夜精通，希望每一次提交、每一篇笔记都是未来的积累。
 
@@ -44,7 +46,7 @@
 
 🔗 [开源地址](https://github.com/JiqingJiang/Keep_Accounts) · [安卓下载](https://github.com/JiqingJiang/Keep_Accounts/releases/tag/v1.2.0)
 
-::github{repo="JiqingJiang/JiqingJiang.github.io"}
+更多项目、成果与方法论沉淀，见 [作品集](/portfolio/)。
 
 ### 杂谈
 

@@ -1,7 +1,7 @@
 ---
 title: "会用 Coding Agent，不等于拥有 AI Native 思维"
 published: 2026-08-04
-tags: ["AI Native", "Agent", "Coding Agent", "工程实践"]
+tags: ["AI Native", "Agent"]
 category: Agent
 description: "从 Sora Android 的 28 天交付案例出发，理解 AI Native 的本质：任务重构、上下文工程、工具编排、评测闭环与结果所有权。"
 draft: false

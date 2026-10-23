@@ -1,5 +1,5 @@
 ---
-title: "从使用 AI 到设计 AI 可执行环境：我对 Agent 上下文工程的理解"
+title: "AI Coding 的真正分水岭：不是模型和Agent工具，而是上下文工程"
 published: 2026-08-25
 description: "模型已经非常强大了，Agent也已经非常强大了。可为什么在有些人手里可以做到几天甚至几小时做出来一个高质量的产品，而在我手里却总是出错？真正拉开差距其实是能否把上下文、规则、流程和验证组织成一套可执行的 AI 工作系统。"
 tags: ["AI", "Agent", "Context Engineering", "AI Coding"]

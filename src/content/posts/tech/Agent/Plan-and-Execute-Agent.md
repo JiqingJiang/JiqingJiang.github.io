@@ -1,7 +1,7 @@
 ---
 title: "Plan-and-Execute Agent：先规划后执行"
 published: 2026-05-15
-tags: ["Agent", "LLM", "ReAct", "Plan-Execute", "DAG"]
+tags: ["Agent", "ReAct", "Plan"]
 category: Agent
 description: "在 ReAct Agent 的基础上实现 Plan-and-Execute 模式，用 LLM 拆解复杂任务、DAG 管理依赖、拓扑排序编排执行顺序。写完之后的体感却让我发现了更深层的问题。"
 draft: false

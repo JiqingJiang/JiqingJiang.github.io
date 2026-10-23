@@ -1,7 +1,7 @@
 ---
 title: "Memory 怎么设计 — 五个环节的实现拆解"
 published: 2026-05-19
-tags: ["Agent", "Memory", "LLM"]
+tags: ["Agent", "Memory"]
 category: Agent
 description: "知道了 Memory 为什么存在，那具体怎么实现？短期记忆用什么数据结构？长期记忆存什么？压缩怎么压？检索怎么搜？五个环节的设计取舍，一个一个拆。"
 draft: false

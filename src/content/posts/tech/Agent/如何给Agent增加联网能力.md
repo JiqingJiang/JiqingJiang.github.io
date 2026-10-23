@@ -2,7 +2,7 @@
 title: "如何给 Agent 增加联网能力：从搜索到可信回答"
 published: 2026-07-23
 updated: 2026-07-23
-tags: ["Agent", "Web Search", "Tool", "系统设计"]
+tags: ["Agent", "Tool"]
 category: Agent
 description: "从人类上网查资料的过程出发，拆解 Agent 联网能力中的搜索发现、来源筛选、页面获取、内容提取、片段召回、多源综合与安全控制。"
 draft: false
