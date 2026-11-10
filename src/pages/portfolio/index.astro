@@ -6,7 +6,7 @@ const entries = await getCollection("projects");
 entries.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<MainGridLayout title="作品集" description="蒋继庆（erode）的能力作品集：独立负责的项目、可验证的成果与可持续沉淀的方法论资产">
+<MainGridLayout title="作品集" description="erode 的作品集：自己上手做过的项目、探索过的东西，和攒下来的方法论">
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 mb-4">
 		<div class="card-base z-10 px-6 md:px-9 py-6 relative w-full">
 			<div class="onload-animation">
@@ -16,10 +16,10 @@ entries.sort((a, b) => a.data.order - b.data.order);
 					作品集
 				</div>
 				<p class="text-black/50 dark:text-white/50 mb-2">
-					我独立负责过什么 · 我做出过什么结果 · 我有什么别人没有的资源。
+					这里都是我自己上手尝试过的东西——做过的项目、走过的探索，还有一路攒下来的方法。
 				</p>
 				<p class="text-sm text-black/40 dark:text-white/40">
-					每个项目按「复盘七问」展开：做了多深 / 为什么做 / 我负责什么 / 为何这么选 / 结果 / 重来怎么改 / 收获。持续更新中。
+					每个项目都按同一套问题复盘过：当时为什么做、我具体负责什么、为什么选这个方案、结果怎么样、重来会怎么改。
 				</p>
 				<div class="flex flex-wrap gap-2 mt-4">
 					{entries.map((e) => (
@@ -27,6 +27,9 @@ entries.sort((a, b) => a.data.order - b.data.order);
 							{e.data.title}
 						</a>
 					))}
+					<a href="/methodology/" class="rounded-lg px-3 py-1 text-sm bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-black/50 dark:text-white/50 transition">
+						方法论 →
+					</a>
 					<a href="/archive/" class="rounded-lg px-3 py-1 text-sm bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-black/50 dark:text-white/50 transition">
 						全部文章 →
 					</a>
@@ -54,5 +57,19 @@ entries.sort((a, b) => a.data.order - b.data.order);
 				</div>
 			</a>
 		))}
+		<a href="/methodology/" class="card-base rounded-[var(--radius-large)] px-5 py-4 hover:translate-y-[-2px] transition active:scale-[0.98] block onload-animation">
+			<div class="flex items-center gap-2 mb-1 flex-wrap">
+				<span class="text-xs rounded-md px-2 py-0.5 bg-[var(--primary)]/10 text-[var(--primary)] font-bold">持续沉淀</span>
+				<span class="text-xs text-black/40 dark:text-white/40">#提问框架</span>
+				<span class="text-xs text-black/40 dark:text-white/40">#元技能</span>
+			</div>
+			<div class="font-bold text-lg text-black/80 dark:text-white/80 mb-1">方法论</div>
+			<div class="text-sm text-black/50 dark:text-white/50 line-clamp-2 mb-2">
+				随时能拿来用的提问框架：一时兴起裁决、行业九问、概念五问、模块十问、复盘七问、宝洁八大问、自我检验。
+			</div>
+			<div class="flex items-center gap-3 text-xs text-black/40 dark:text-white/40">
+				<span>7 套框架 · 52 问</span>
+			</div>
+		</a>
 	</div>
 </MainGridLayout>

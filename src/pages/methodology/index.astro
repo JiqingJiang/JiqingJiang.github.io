@@ -1,0 +1,197 @@
+---
+import { methodologies, methodologyText } from "@constants/methodology";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
+
+const tabShort: Record<string, string> = {
+	impulse: "一时兴起裁决",
+	industry: "行业九问",
+	concept: "概念五问",
+	module: "模块十问",
+	project: "复盘七问",
+	pg8: "宝洁八大问",
+	selfcheck: "自我检验",
+};
+---
+
+<MainGridLayout title="方法论" description="提问框架方法论：一时兴起裁决、行业调研、概念认知、模块拆解、项目复盘、行为面试与自我检验">
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 mb-4">
+		<div class="card-base z-10 px-6 md:px-9 py-6 relative w-full">
+			<div class="onload-animation">
+				<div class="text-3xl md:text-[2.25rem]/[2.75rem] font-bold text-black/90 dark:text-white/90 mb-3
+					md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+					before:absolute before:top-[0.75rem] before:left-[-1.125rem] before:relative">
+					方法论
+				</div>
+				<p class="text-black/50 dark:text-white/50 mb-2">
+					持续积累沉淀的元技能方法论——不绑定具体领域的提问框架，可迁移、可复利。
+				</p>
+				<p class="text-sm text-black/40 dark:text-white/40">
+					遇到对应场景，切到对应标签，按问题逐条过一遍；点「复制这组问题」可以拿去问 AI 或自答。持续更新中。
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="mb-4 flex gap-2 overflow-x-auto pb-1 onload-animation" role="tablist" aria-label="方法论列表">
+		{methodologies.map((m, i) => (
+			<button
+				type="button"
+				role="tab"
+				aria-selected={i === 0}
+				aria-controls={`mpanel-${m.key}`}
+				data-mtab={m.key}
+				class:list={[
+					"shrink-0 inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-sm font-semibold transition active:scale-95",
+					i === 0
+						? "bg-[var(--primary)] text-white"
+						: "bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 hover:bg-black/10 dark:hover:bg-white/20",
+				]}
+			>
+				<span class="w-2 h-2 rounded-full shrink-0" style={`background: ${m.color}`}></span>
+				{tabShort[m.key]}
+			</button>
+		))}
+	</div>
+
+	{methodologies.map((m, i) => (
+		<section
+			id={`mpanel-${m.key}`}
+			role="tabpanel"
+			data-mpanel={m.key}
+			hidden={i !== 0}
+			class="card-base rounded-[var(--radius-large)] px-6 md:px-9 py-6 mpanel"
+		>
+			<div class="flex items-center justify-between gap-3 mb-1 flex-wrap">
+				<div class="flex items-center gap-3">
+					<span
+						class="w-[38px] h-[38px] rounded-[11px] grid place-items-center text-white shrink-0"
+						style={`background: ${m.color}`}
+					>
+						<Icon name={m.icon} class="w-5 h-5" />
+					</span>
+					<div>
+						<h2 class="font-bold text-xl leading-snug text-black/85 dark:text-white/85">{m.title}</h2>
+						<p class="text-[13px] text-black/50 dark:text-white/50 mt-0.5 max-w-2xl">{m.desc}</p>
+					</div>
+				</div>
+				<button
+					type="button"
+					data-copy-methodology={m.key}
+					class="inline-flex items-center gap-1.5 text-xs font-semibold text-black/50 dark:text-white/50 border border-black/15 dark:border-white/15 rounded-lg px-3 py-1.5 hover:border-black/30 dark:hover:border-white/30 hover:text-black/80 dark:hover:text-white/80 transition active:scale-95"
+				>
+					<Icon name="fa6-regular:copy" class="w-3 h-3" />
+					复制这组问题
+				</button>
+			</div>
+			<ol class="flex flex-col mt-4 border-t border-dashed border-[var(--line-divider)] pt-2">
+				{m.questions.map((q, qi) => (
+					<li class="flex items-start gap-3 px-2 py-2.5 rounded-lg text-sm leading-[1.7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition">
+						<span class="text-xs font-bold w-5 shrink-0 pt-1 text-center rounded" style={`color: ${m.color}`}>
+							{qi + 1}
+						</span>
+						<span class="flex-1 text-black/70 dark:text-white/70">
+							<span class="font-semibold text-black/90 dark:text-white/90">{q.lead}</span>
+							{q.hint && <span class="text-black/40 dark:text-white/40">{` —— ${q.hint}`}</span>}
+						</span>
+					</li>
+				))}
+			</ol>
+		</section>
+	))}
+</MainGridLayout>
+
+<style>
+	.mpanel {
+		animation: mpanel-in 0.25s ease-out;
+	}
+	@keyframes mpanel-in {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	[data-copy-methodology][data-copy-done] {
+		color: var(--primary);
+		border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+	}
+</style>
+
+<script>
+	import { methodologies, methodologyText } from "@constants/methodology";
+
+	function legacyCopy(text: string): boolean {
+		try {
+			const ta = document.createElement("textarea");
+			ta.value = text;
+			ta.style.position = "fixed";
+			ta.style.opacity = "0";
+			document.body.appendChild(ta);
+			ta.select();
+			const ok = document.execCommand("copy");
+			ta.remove();
+			return ok;
+		} catch {
+			return false;
+		}
+	}
+
+	function markCopied(btn: HTMLElement, ok: boolean) {
+		const original = btn.innerHTML;
+		btn.innerHTML = "";
+		const label = document.createElement("span");
+		label.textContent = ok ? "已复制 ✓" : "复制失败，请手动复制";
+		btn.appendChild(label);
+		setTimeout(() => {
+			btn.innerHTML = original;
+			btn.removeAttribute("data-copy-done");
+		}, 1500);
+	}
+
+	function activateTab(key: string) {
+		document.querySelectorAll<HTMLButtonElement>("[data-mtab]").forEach((t) => {
+			const on = t.getAttribute("data-mtab") === key;
+			t.setAttribute("aria-selected", String(on));
+			t.classList.toggle("bg-[var(--primary)]", on);
+			t.classList.toggle("text-white", on);
+			t.classList.toggle("bg-black/5", !on);
+			t.classList.toggle("text-black/50", !on);
+			t.classList.toggle("dark:bg-white/10", !on);
+			t.classList.toggle("dark:text-white/50", !on);
+			t.classList.toggle("hover:bg-black/10", !on);
+			t.classList.toggle("dark:hover:bg-white/20", !on);
+		});
+		document.querySelectorAll<HTMLElement>("[data-mpanel]").forEach((p) => {
+			p.hidden = p.getAttribute("data-mpanel") !== key;
+		});
+	}
+
+	if (!(window as unknown as { __methodologyBound?: boolean }).__methodologyBound) {
+		(window as unknown as { __methodologyBound?: boolean }).__methodologyBound = true;
+		document.addEventListener("click", (e) => {
+			const tab = (e.target as HTMLElement).closest<HTMLElement>("[data-mtab]");
+			if (tab) {
+				activateTab(tab.getAttribute("data-mtab") ?? "");
+				return;
+			}
+			const btn = (e.target as HTMLElement).closest<HTMLElement>("[data-copy-methodology]");
+			if (!btn) return;
+			const m = methodologies.find((x) => x.key === btn.getAttribute("data-copy-methodology"));
+			if (!m) return;
+			btn.setAttribute("data-copy-done", "");
+			const text = methodologyText(m);
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				navigator.clipboard
+					.writeText(text)
+					.then(() => markCopied(btn, true))
+					.catch(() => markCopied(btn, legacyCopy(text)));
+			} else {
+				markCopied(btn, legacyCopy(text));
+			}
+		});
+	}
+</script>
